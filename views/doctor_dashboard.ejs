@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Doctor Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(135deg, #74ebd5, #acb6e5);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: Arial, sans-serif;
+        }
+
+        .dashboard-container {
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(12px);
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            max-width: 700px;
+            width: 100%;
+            text-align: center;
+        }
+
+        .btn-custom {
+            width: 100%;
+            margin: 10px 0;
+        }
+
+        .profile-container,
+        .appointments-container {
+            display: none;
+            background: rgba(255, 255, 255, 0.3);
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 20px;
+            text-align: left;
+        }
+
+        .profile-container h3,
+        .appointments-container h3 {
+            text-align: center;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+
+        table,
+        th,
+        td {
+            border: 1px solid black;
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+        
+    </style>
+</head>
+
+<body>
+    <div class="dashboard-container">
+        <h2>Welcome, <%= doctor.name %>!</h2>
+        <p>This is your doctor dashboard.</p>
+
+        <!-- View Profile Button -->
+        <button class="btn btn-info btn-custom" onclick="toggleProfile()">View Profile</button>
+
+        <!-- Profile Section (Initially Hidden) -->
+        <div id="profile-section" class="profile-container">
+            <h3>Your Profile</h3>
+            <p><strong>Name:</strong>
+                <%= doctor.name %>
+            </p>
+            <p><strong>Contact Number:</strong>
+                <%= doctor.contact_no %>
+            </p>
+            <p><strong>Specialization:</strong>
+                <%= doctor.specialization %>
+            </p>
+
+            <!-- Edit Account Button -->
+            <a href="/edit-doctor-profile" class="btn btn-warning btn-custom">Edit Account</a>
+
+            <!-- Delete Account Button -->
+            <button class="btn btn-danger btn-custom" onclick="confirmDelete()">Delete Account</button>
+        </div>
+
+        <!-- View Appointments Button -->
+        <button class="btn btn-success btn-custom" onclick="toggleAppointments()">View Appointments</button>
+
+
+        <!-- View Feedbacks Button -->
+<button class="btn btn-primary btn-custom" onclick="toggleFeedbacks()">View Feedbacks</button>
+
+<!-- Feedback Section (Initially Hidden) -->
+<div id="feedback-section" class="appointments-container" style="display: none;">
+    <h3>Patient Feedbacks</h3>
+    <% if (feedbacks.length > 0) { %>
+        <table>
+            <tr>
+                <th>Patient Name</th>
+                <th>Rating</th>
+                <th>Comment</th>
+                <th>Date</th>
+            </tr>
+            <% feedbacks.forEach(feedback => { %>
+                <tr>
+                    <td><%= feedback.patient_name %></td>
+                    <td><%= feedback.rating %>/5</td>
+                    <td><%= feedback.comment %></td>
+                    <td><%= new Date(feedback.created_at).toLocaleDateString() %></td>
+                </tr>
+            <% }) %>
+        </table>
+    <% } else { %>
+        <p>No feedback available yet.</p>
+    <% } %>
+</div>
+
+<script>
+    function toggleFeedbacks() {
+        var feedbackSection = document.getElementById("feedback-section");
+        feedbackSection.style.display = (feedbackSection.style.display === "none" || feedbackSection.style.display === "") ? "block" : "none";
+    }
+</script>
+
+
+        <!-- Appointments Section (Initially Hidden) -->
+        <div id="appointments-section" class="appointments-container">
+            <h3>Booked Appointments</h3>
+            <% if (appointments.length> 0) { %>
+                <table>
+                    <tr>
+                        <th>Patient Name</th>
+                        <th>Contact No.</th>
+                        <th>Symptoms</th>
+                        <th>Appointment Time</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                    </tr>
+                    <% appointments.forEach(appointment=> { %>
+                        <tr>
+                            <td>
+                                <%= appointment.patient_name %>
+                            </td>
+                            <td>
+                                <%= appointment.contact_no %>
+                            </td>
+                            <td>
+                                <%= appointment.symptoms %>
+                            </td>
+                            <td>
+                                <%= new Date(appointment.appointment_time).toLocaleString() %>
+                            </td>
+                            <td>
+                                <% if (appointment.status==="Accepted" ) { %>
+                                    <span class="badge bg-success">Accepted</span>
+                                    <% } else if (appointment.status==="Rejected" ) { %>
+                                        <span class="badge bg-danger">Rejected</span>
+                                        <% } else { %>
+                                            <span class="badge bg-warning text-dark">Pending</span>
+                                            <% } %>
+                            </td>
+
+                            <td>
+                                <% if (appointment.status==="Pending" ) { %>
+                                    <form action="/update-appointment-status" method="POST" style="display:inline;">
+                                        <input type="hidden" name="appointment_id" value="<%= appointment.id %>">
+                                        <button type="submit" name="status" value="Accepted"
+                                            class="btn btn-success btn-sm">Accept</button>
+                                        <button type="submit" name="status" value="Rejected"
+                                            class="btn btn-danger btn-sm">Reject</button>
+                                    </form>
+
+                                    <% } else if (appointment.status==="Accepted" ) { %>
+                                        <button class="btn btn-primary btn-sm"
+                                            onclick="openPrescriptionModal('<%= appointment.id %>', '<%= appointment.patient_name %>')">Write
+                                            Prescription</button>
+
+                                        <% } else if (appointment.status==="Rejected" ) { %>
+                                            <span class="text-muted">No actions</span>
+                                            <% } else { %>
+                                                <span class="text-muted">No actions</span>
+                                                <% } %>
+                            </td>
+
+                        </tr>
+                        <% }) %>
+                </table>
+
+                <!-- Prescription Modal (Hidden Initially) -->
+                <div id="prescriptionModal" class="modal" style="display: none;">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title">Write Prescription for <span id="patient-name"></span></h5>
+                                <button type="button" class="btn-close" onclick="closePrescriptionModal()"></button>
+                            </div>
+                            <div class="modal-body">
+                                <form action="/submit-prescription" method="POST">
+                                    <input type="hidden" name="appointment_id" id="appointment_id">
+                                    <textarea name="prescription_text" class="form-control" rows="5"
+                                        required></textarea>
+                                    <button type="submit" class="btn btn-success mt-2">Submit Prescription</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <% } else { %>
+                    <p>No appointments booked yet.</p>
+                    <% } %>
+        </div>
+
+
+
+        <script>
+
+            function toggleProfile() {
+                var profileSection = document.getElementById("profile-section");
+                profileSection.style.display = (profileSection.style.display === "none" || profileSection.style.display === "") ? "block" : "none";
+            }
+
+            function toggleAppointments() {
+                var appointmentsSection = document.getElementById("appointments-section");
+                appointmentsSection.style.display = (appointmentsSection.style.display === "none" || appointmentsSection.style.display === "") ? "block" : "none";
+            }
+
+            function confirmDelete() {
+                if (confirm("Are you sure you want to delete your account? This action cannot be undone!")) {
+                    window.location.href = "/delete-doctor-account";
+                }
+            }
+
+            function openPrescriptionModal(appointmentId, patientName) {
+    document.getElementById("patient-name").innerText = patientName;
+    document.getElementById("appointment_id").value = appointmentId; // Ensure the correct ID is set
+    document.getElementById("prescriptionModal").style.display = "block";
+}
+
+function closePrescriptionModal() {
+    document.getElementById("prescriptionModal").style.display = "none";
+}
+
+
+            // Close modal when clicking outside of it
+            window.onclick = function (event) {
+                var modal = document.getElementById("prescriptionModal");
+                if (event.target === modal) {
+                    modal.style.display = "none";
+                }
+            };
+
+        </script>
+
+        <!-- Logout Button -->
+        <button class="btn btn-danger btn-custom" onclick="logout()">Logout</button>
+
+        <script>
+            function logout() {
+                // Clear JWT token from local storage or cookies (if used)
+                document.cookie = "token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+                localStorage.removeItem("token");
+
+                // Redirect to login page
+                window.location.href = "/login";
+            }
+        </script>
+
+
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>

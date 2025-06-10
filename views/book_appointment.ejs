@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book Appointment</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(135deg, #ff9a9e, #fad0c4);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: Arial, sans-serif;
+        }
+        .glass-form {
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            max-width: 600px;
+            width: 100%;
+        }
+        .form-title {
+            text-align: center;
+            margin-bottom: 20px;
+            font-weight: bold;
+            font-size: 1.5rem;
+            color: #333;
+        }
+        .form-control {
+            background: rgba(255, 255, 255, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.6);
+        }
+        .btn-primary {
+            background-color: #ff758c;
+            border: none;
+        }
+        .btn-primary:hover {
+            background-color: #e83e8c;
+        }
+        @media (max-width: 768px) {
+            .glass-form { padding: 20px; }
+            .form-title { font-size: 1.25rem; }
+        }
+    </style>
+</head>
+<body>
+    <div class="glass-form">
+        <div class="form-title">Book Appointment</div>
+        <form action="/book-appointment" method="POST" onsubmit="return validateForm()">
+            <div class="mb-3">
+                <label for="patientId" class="form-label">Patient ID</label>
+                <input type="number" class="form-control" name="patient_id" required>
+            </div>
+            <div class="mb-3">
+                <label for="doctorId" class="form-label">Select Doctor</label>
+                <select class="form-select" name="doctor_id" required>
+                    <% doctors.forEach(doctor => { %>
+                        <option value="<%= doctor.doctor_id %>"><%= doctor.name %></option>
+                    <% }); %>
+                </select>
+            </div>
+            <div class="mb-3">
+                <label for="contactNo" class="form-label">Contact Number</label>
+                <input type="text" class="form-control" id="contactNo" name="contact_no" required maxlength="10" pattern="[0-9]{10}" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
+                <small class="text-danger" id="phoneError"></small>
+            </div>
+            <div class="mb-3">
+                <label for="symptoms" class="form-label">Symptoms</label>
+                <textarea class="form-control" name="symptoms" rows="3" required></textarea>
+            </div>
+            <div class="mb-3">
+                <label for="appointmentTime" class="form-label">Appointment Time</label>
+                <input type="datetime-local" class="form-control" id="appointmentTime" name="appointment_time" required>
+                <small class="text-danger" id="dateError"></small>
+            </div>
+
+            <button type="submit" class="btn btn-primary w-100">Book Appointment</button>
+            <div style="text-align: right;">
+                <a href="/patient-dashboard" class="btn btn-primary btn-custom" style="margin-top: 14px; background-color: rgb(9, 130, 252);">Back</a>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        function validateForm() {
+            const phoneInput = document.getElementById("contactNo");
+            const phoneError = document.getElementById("phoneError");
+            const appointmentInput = document.getElementById("appointmentTime");
+            const dateError = document.getElementById("dateError");
+
+            let isValid = true;
+
+            // Validate phone number
+            const phoneRegex = /^[0-9]{10}$/;
+            if (!phoneRegex.test(phoneInput.value)) {
+                phoneError.innerText = "Phone number must be exactly 10 digits.";
+                isValid = false;
+            } else {
+                phoneError.innerText = "";
+            }
+
+            // Validate appointment date (should not allow past dates)
+            const now = new Date();
+            const selectedDate = new Date(appointmentInput.value);
+
+            if (selectedDate < now) {
+                dateError.innerText = "Appointment date must be today or in the future.";
+                isValid = false;
+            } else {
+                dateError.innerText = "";
+            }
+
+            return isValid;
+        }
+    </script>
+</body>
+</html>

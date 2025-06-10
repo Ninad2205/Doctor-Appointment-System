@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Appointment</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(135deg, #74ebd5, #acb6e5);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: Arial, sans-serif;
+        }
+
+        .form-container {
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            max-width: 500px;
+            width: 100%;
+            text-align: center;
+        }
+
+        .form-label {
+            font-weight: bold;
+        }
+
+        .btn-custom {
+            width: 100%;
+            margin-top: 10px;
+        }
+    </style>
+
+    <script>
+        // Function to set the minimum appointment date/time (today onwards)
+        document.addEventListener("DOMContentLoaded", function () {
+            let now = new Date();
+            now.setMinutes(now.getMinutes() - now.getTimezoneOffset()); // Adjust for timezone offset
+            document.getElementById("appointment_time").min = now.toISOString().slice(0, 16);
+        });
+
+        // Validate 10-digit mobile number
+        function validateForm() {
+            let contact_no = document.getElementById("contact_no").value;
+            if (!/^\d{10}$/.test(contact_no)) {
+                alert("❌ Invalid contact number. Must be exactly 10 digits.");
+                return false;
+            }
+            return true;
+        }
+    </script>
+</head>
+
+<body>
+    <div class="form-container">
+        <h2 class="mb-4">Edit Appointment</h2>
+
+        <form action="/update-appointment/<%= appointment.id %>" method="POST" onsubmit="return validateForm()">
+            <input type="hidden" name="appointment_id" value="<%= appointment.id %>">
+
+            <div class="mb-3">
+                <label class="form-label">Contact Number</label>
+                <input type="text" class="form-control" id="contact_no" name="contact_no" value="<%= appointment.contact_no %>" required>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Symptoms</label>
+                <input type="text" class="form-control" name="symptoms" value="<%= appointment.symptoms %>" required>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Appointment Time</label>
+                <input type="datetime-local" class="form-control" id="appointment_time" name="appointment_time" 
+                    value="<%= appointment.appointment_time ? appointment.appointment_time.toISOString().slice(0,16) : '' %>" required>
+            </div>
+
+            <button type="submit" class="btn btn-success btn-custom">Update Appointment</button>
+            <a href="/patient-dashboard" class="btn btn-secondary btn-custom">Cancel</a>
+        </form>
+    </div>
+</body>
+</html>

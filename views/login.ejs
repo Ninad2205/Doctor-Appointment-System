@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Page</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(135deg, #74ebd5, #acb6e5);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .glass-form {
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(12px);
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            max-width: 400px;
+            width: 100%;
+            text-align: center;
+        }
+
+        .form-title {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        .form-control {
+            background: rgba(255, 255, 255, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.6);
+        }
+
+        .input-group-text {
+            cursor: pointer;
+            background: rgba(255, 255, 255, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.6);
+        }
+
+        .btn-primary, .btn-secondary {
+            border: none;
+            width: 100%;
+            margin-top: 10px;
+        }
+
+        .btn-primary {
+            background-color: #007bff;
+        }
+
+        .btn-primary:hover {
+            background-color: #0056b3;
+        }
+
+        .btn-secondary {
+            background-color: #6c757d;
+        }
+
+        .btn-secondary:hover {
+            background-color: #5a6268;
+        }
+
+        .register-section {
+            margin-top: 15px;
+            font-size: 0.9rem;
+            color: #333;
+        }
+
+        .register-section a {
+            color: #007bff;
+            font-weight: bold;
+            text-decoration: none;
+            transition: 0.3s;
+        }
+
+        .register-section a:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width: 768px) {
+            .glass-form {
+                padding: 20px;
+            }
+            .form-title {
+                font-size: 1.25rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <% if (messages.success) { %>
+        <div class="alert alert-success text-center">
+            <%= messages.success %>
+        </div>
+    <% } %>
+    
+    <% if (messages.error) { %>
+        <div class="alert alert-danger text-center">
+            <%= messages.error %>
+        </div>
+    <% } %>
+    
+    <div class="glass-form">
+        <div class="form-title">Login</div>
+
+        <% if (typeof errorMessage !== "undefined" && errorMessage) { %>
+            <p class="text-danger"><%= errorMessage %></p>
+        <% } %>
+
+        <form action="/login" method="POST">
+            <div class="mb-3">
+                <label for="userType" class="form-label">Login As</label>
+                <select class="form-select" name="userType" required>
+                    <option selected disabled>Select user type</option>
+                    <option value="doctor">Doctor</option>
+                    <option value="patient">Patient</option>
+                </select>
+            </div>
+            <div class="mb-3">
+                <label for="username" class="form-label">Username</label>
+                <input type="text" class="form-control" name="username" required>
+            </div>
+            <div class="mb-3">
+                <label for="password" class="form-label">Password</label>
+                <div class="input-group">
+                    <input type="password" class="form-control" name="password" id="password" required>
+                    <span class="input-group-text" onclick="togglePassword()">👁️</span>
+                </div>
+            </div>
+            <div class="d-grid">
+                <button type="submit" class="btn btn-primary">Login</button>
+            </div>
+            <div class="d-grid">
+                <a href="/" class="btn btn-secondary">Go to Home Page</a>
+            </div>
+        </form>
+
+        <div class="register-section">
+            <p>Don't have an account?</p>
+            <a href="/register-doctor">Register as Doctor</a> | 
+            <a href="/register-patient">Register as Patient</a>
+        </div>
+    </div>
+
+    <script>
+        function togglePassword() {
+            const passwordInput = document.getElementById("password");
+            passwordInput.type = passwordInput.type === "password" ? "text" : "password";
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Patient Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(135deg, #74ebd5, #acb6e5);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: Arial, sans-serif;
+        }
+
+        .dashboard-container {
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(12px);
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            max-width: 600px;
+            width: 100%;
+            text-align: center;
+        }
+
+        .btn-custom {
+            width: 100%;
+            margin: 10px 0;
+        }
+
+        .profile-container,
+        .appointments-container {
+            display: none;
+            background: rgba(255, 255, 255, 0.3);
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 20px;
+            text-align: left;
+        }
+
+        .profile-container h3,
+        .appointments-container h3 {
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="dashboard-container">
+        <h2>Welcome, <%= user.name %>!</h2>
+        <p>This is your patient dashboard.</p>
+
+        <!-- Book Appointment Button -->
+        <a href="/book-appointment" class="btn btn-primary btn-custom">Book Appointment</a>
+
+        <!-- View Profile Button -->
+        <button class="btn btn-info btn-custom" onclick="toggleProfile()">View Profile</button>
+
+        <!-- View Appointments Button -->
+        <button class="btn btn-success btn-custom" onclick="toggleAppointments()">View Appointments</button>
+
+
+        <!-- Give Feedback Button -->
+        <a href="/feedback" class="btn btn-warning btn-custom">Give Feedback</a>
+
+
+        <!-- View Prescriptions Button -->
+        <button class="btn btn-secondary btn-custom" id="showPrescriptionsBtn">View Prescriptions</button>
+
+        <!-- Logout Button -->
+        <a href="/logout" class="btn btn-danger btn-custom">Logout</a>
+
+        <!-- Profile Section (Initially Hidden) -->
+        <div id="profile-section" class="profile-container">
+            <h3>Your Profile</h3>
+            <p><strong>Name:</strong>
+                <%= user.name %>
+            </p>
+            <p><strong>Contact Number:</strong>
+                <%= user.contact_no %>
+            </p>
+
+            <!-- Edit Account Button -->
+            <a href="/edit-profile" class="btn btn-warning btn-custom">Edit Account</a>
+
+            <!-- Delete Account Button -->
+            <button class="btn btn-danger btn-custom" onclick="confirmDelete()">Delete Account</button>
+        </div>
+
+        <!-- Appointments Section (Initially Hidden) -->
+        <div id="appointments-section" class="appointments-container">
+            <h3>Your Booked Appointments</h3>
+            <% if (appointments.length> 0) { %>
+                <ul class="list-group">
+                    <% appointments.forEach(appointment=> { %>
+                        <li class="list-group-item">
+                            <strong>Doctor:</strong>
+                            <%= appointment.doctor_name %> <br>
+                                <strong>Contact:</strong>
+                                <%= appointment.contact_no %> <br>
+                                    <strong>Symptoms:</strong>
+                                    <%= appointment.symptoms %> <br>
+                                        <strong>Time:</strong>
+                                        <%= appointment.appointment_time %> <br>
+                                            <strong>Status:</strong>
+                                            <% if (appointment.status==="Accepted" ) { %>
+                                                <span class="badge bg-success">Accepted</span>
+                                                <% } else if (appointment.status==="Rejected" ) { %>
+                                                    <span class="badge bg-danger">Rejected</span>
+                                                    <% } else { %>
+                                                        <span class="badge bg-warning text-dark">Pending</span>
+                                                        <a href="/edit-appointment/<%= appointment.id %>"
+                                                            class="btn btn-warning btn-sm">Edit</a>
+                                                        <button class="btn btn-danger btn-sm"
+                                                            onclick="confirmDeleteAppointment('<%= appointment.id %>')">Delete</button>
+                                                        <% } %>
+                        </li>
+                        <% }); %>
+                </ul>
+                <% } else { %>
+                    <p>No appointments booked yet.</p>
+                    <% } %>
+        </div>
+
+        <!-- Prescriptions Section -->
+
+        <table class="table" id="prescriptionsTable" style="display: none; margin-top: 10px;">
+            <tr>
+                <th>Doctor ID</th>
+                <th>Prescription</th>
+                <th>Date</th>
+            </tr>
+            <% if (prescriptions.length> 0) { %>
+                <% prescriptions.forEach(prescription=> { %>
+                    <tr>
+                        <td>
+                            <%= prescription.doctor_id %>
+                        </td>
+                        <td>
+                            <%= prescription.prescription_text %>
+                        </td>
+                        <td>
+                            <%= new Date(prescription.created_at).toLocaleString() %>
+                        </td>
+                    </tr>
+                    <% }); %>
+                        <% } else { %>
+                            <tr>
+                                <td colspan="3" class="text-center">No prescriptions available.</td>
+                            </tr>
+                            <% } %>
+        </table>
+
+        <script>
+            document.getElementById('showPrescriptionsBtn').addEventListener('click', function () {
+                var table = document.getElementById('prescriptionsTable');
+                if (table.style.display === "none") {
+                    table.style.display = "table";
+                    this.innerText = "Hide Prescriptions";
+                } else {
+                    table.style.display = "none";
+                    this.innerText = "Show Prescriptions";
+                }
+            });
+
+            function confirmDeleteAppointment(appointmentId) {
+                if (confirm("Are you sure you want to delete this appointment?")) {
+                    window.location.href = "/delete-appointment/" + appointmentId;
+                }
+            }
+
+            function toggleProfile() {
+                var profileSection = document.getElementById("profile-section");
+                profileSection.style.display = (profileSection.style.display === "none" || profileSection.style.display === "") ? "block" : "none";
+            }
+
+            function toggleAppointments() {
+                var appointmentsSection = document.getElementById("appointments-section");
+                appointmentsSection.style.display = (appointmentsSection.style.display === "none" || appointmentsSection.style.display === "") ? "block" : "none";
+            }
+
+            function confirmDelete() {
+                if (confirm("Are you sure you want to delete your account? This action cannot be undone!")) {
+                    window.location.href = "/delete-account";
+                }
+            }
+        </script>
+
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    </div>
+</body>
+
+</html>

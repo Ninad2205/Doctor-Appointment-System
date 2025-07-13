@@ -3,41 +3,430 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Edit Appointment</title>
+    <title>Edit Appointment - Healthcare Portal</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
-        body {
-            background: linear-gradient(135deg, #74ebd5, #acb6e5);
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-family: Arial, sans-serif;
+        :root {
+            --primary-color: #2563eb;
+            --primary-dark: #1d4ed8;
+            --secondary-color: #64748b;
+            --success-color: #10b981;
+            --success-dark: #059669;
+            --error-color: #ef4444;
+            --warning-color: #f59e0b;
+            --background-color: #f8fafc;
+            --card-background: #ffffff;
+            --text-primary: #1e293b;
+            --text-secondary: #64748b;
+            --border-color: #e2e8f0;
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
         }
 
-        .form-container {
-            background: rgba(255, 255, 255, 0.2);
-            backdrop-filter: blur(10px);
-            border-radius: 15px;
-            padding: 30px;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            max-width: 500px;
-            width: 100%;
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: var(--background-color);
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.6;
+            color: var(--text-primary);
+            min-height: 100vh;
+            padding: 20px 0;
+        }
+
+        .container {
+            max-width: 700px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .header {
             text-align: center;
+            margin-bottom: 40px;
+            padding: 20px 0;
+        }
+
+        .header h1 {
+            font-size: 2.25rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-bottom: 8px;
+            letter-spacing: -0.025em;
+        }
+
+        .header p {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+            margin: 0;
+        }
+
+        .edit-card {
+            background: var(--card-background);
+            border-radius: 16px;
+            padding: 40px;
+            box-shadow: var(--shadow-lg);
+            border: 1px solid var(--border-color);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .edit-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--warning-color), var(--success-color));
+        }
+
+        .appointment-info {
+            background: #fef3c7;
+            border: 1px solid #fcd34d;
+            border-radius: 8px;
+            padding: 16px;
+            margin-bottom: 32px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .appointment-info i {
+            color: var(--warning-color);
+            font-size: 1.2rem;
+        }
+
+        .appointment-info-content {
+            flex: 1;
+        }
+
+        .appointment-info h3 {
+            margin: 0 0 4px 0;
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .appointment-info p {
+            margin: 0;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        .form-section {
+            margin-bottom: 32px;
+        }
+
+        .form-section:last-of-type {
+            margin-bottom: 0;
+        }
+
+        .section-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .section-title i {
+            color: var(--primary-color);
+            font-size: 1.1rem;
+        }
+
+        .form-group {
+            margin-bottom: 24px;
         }
 
         .form-label {
-            font-weight: bold;
+            font-weight: 500;
+            color: var(--text-primary);
+            margin-bottom: 8px;
+            display: block;
+            font-size: 0.95rem;
         }
 
-        .btn-custom {
-            width: 100%;
-            margin-top: 10px;
+        .form-control, .form-select {
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            padding: 12px 16px;
+            font-size: 1rem;
+            transition: all 0.2s ease;
+            background-color: var(--card-background);
+            color: var(--text-primary);
+        }
+
+        .form-control:focus, .form-select:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+
+        .form-control:invalid {
+            border-color: var(--error-color);
+        }
+
+        .form-control::placeholder {
+            color: var(--text-secondary);
+        }
+
+        .input-group {
+            position: relative;
+        }
+
+        .input-icon {
+            position: absolute;
+            left: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-secondary);
+            z-index: 2;
+        }
+
+        .input-group .form-control {
+            padding-left: 48px;
+        }
+
+        .error-message {
+            color: var(--error-color);
+            font-size: 0.875rem;
+            margin-top: 6px;
+            display: block;
+            font-weight: 500;
+        }
+
+        .form-help {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+            margin-top: 6px;
+        }
+
+        .required {
+            color: var(--error-color);
+            margin-left: 2px;
+        }
+
+        .btn-success {
+            background-color: var(--success-color);
+            border: none;
+            padding: 14px 32px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 1rem;
+            transition: all 0.2s ease;
+            box-shadow: var(--shadow-sm);
+            text-transform: none;
+            letter-spacing: 0.025em;
+        }
+
+        .btn-success:hover {
+            background-color: var(--success-dark);
+            transform: translateY(-1px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .btn-success:active {
+            transform: translateY(0);
+        }
+
+        .btn-secondary {
+            background-color: transparent;
+            border: 2px solid var(--border-color);
+            color: var(--text-secondary);
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: 500;
+            font-size: 1rem;
+            transition: all 0.2s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-secondary:hover {
+            background-color: var(--background-color);
+            color: var(--text-primary);
+            text-decoration: none;
+            border-color: var(--text-secondary);
+        }
+
+        .button-group {
+            display: flex;
+            gap: 16px;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 32px;
+            padding-top: 24px;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .changes-indicator {
+            background: #dbeafe;
+            border: 1px solid #3b82f6;
+            border-radius: 8px;
+            padding: 12px;
+            margin-bottom: 24px;
+            display: none;
+        }
+
+        .changes-indicator.show {
+            display: block;
+        }
+
+        .changes-indicator i {
+            color: var(--primary-color);
+            margin-right: 8px;
+        }
+
+        .changes-indicator span {
+            color: var(--text-primary);
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        .loading {
+            opacity: 0.6;
+            pointer-events: none;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 0 16px;
+            }
+            
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .edit-card {
+                padding: 24px;
+            }
+            
+            .button-group {
+                flex-direction: column-reverse;
+                gap: 12px;
+            }
+            
+            .btn-success, .btn-secondary {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .header h1 {
+                font-size: 1.75rem;
+            }
+            
+            .edit-card {
+                padding: 20px;
+            }
         }
     </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1><i class="fas fa-edit"></i> Edit Appointment</h1>
+            <p>Update your appointment details</p>
+        </div>
+
+        <div class="edit-card">
+            <div class="appointment-info">
+                <i class="fas fa-info-circle"></i>
+                <div class="appointment-info-content">
+                    <h3>Editing Appointment #<%= appointment.id %></h3>
+                    <p>Make changes to your appointment details below</p>
+                </div>
+            </div>
+
+            <div class="changes-indicator" id="changesIndicator">
+                <i class="fas fa-exclamation-triangle"></i>
+                <span>You have unsaved changes</span>
+            </div>
+
+            <form action="/update-appointment/<%= appointment.id %>" method="POST" onsubmit="return validateForm()" id="editForm">
+                <input type="hidden" name="appointment_id" value="<%= appointment.id %>">
+
+                <div class="form-section">
+                    <div class="section-title">
+                        <i class="fas fa-user"></i>
+                        Contact Information
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="contact_no" class="form-label">Contact Number <span class="required">*</span></label>
+                        <div class="input-group">
+                            <i class="fas fa-phone input-icon"></i>
+                            <input type="tel" class="form-control" id="contact_no" name="contact_no" 
+                                   value="<%= appointment.contact_no %>" required maxlength="10" 
+                                   pattern="[0-9]{10}" placeholder="Enter 10-digit phone number" 
+                                   oninput="this.value = this.value.replace(/[^0-9]/g, '')">
+                        </div>
+                        <small class="error-message" id="phoneError"></small>
+                        <div class="form-help">Please enter a valid 10-digit phone number</div>
+                    </div>
+                </div>
+
+                <div class="form-section">
+                    <div class="section-title">
+                        <i class="fas fa-stethoscope"></i>
+                        Medical Information
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="symptoms" class="form-label">Symptoms <span class="required">*</span></label>
+                        <textarea class="form-control" id="symptoms" name="symptoms" rows="4" required 
+                                  placeholder="Please describe your symptoms or reason for visit..."><%= appointment.symptoms %></textarea>
+                        <div class="form-help">Provide detailed information about your symptoms</div>
+                    </div>
+                </div>
+
+                <div class="form-section">
+                    <div class="section-title">
+                        <i class="fas fa-calendar-alt"></i>
+                        Appointment Schedule
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="appointment_time" class="form-label">Appointment Date & Time <span class="required">*</span></label>
+                        <input type="datetime-local" class="form-control" id="appointment_time" name="appointment_time" 
+                               value="<%= appointment.appointment_time ? appointment.appointment_time.toISOString().slice(0,16) : '' %>" 
+                               required>
+                        <small class="error-message" id="dateError"></small>
+                        <div class="form-help">Select your preferred appointment date and time</div>
+                    </div>
+                </div>
+
+                <div class="button-group">
+                    <a href="/patient-dashboard" class="btn-secondary">
+                        <i class="fas fa-times"></i>
+                        Cancel
+                    </a>
+                    <button type="submit" class="btn btn-success">
+                        <i class="fas fa-save"></i>
+                        Update Appointment
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
 
     <script>
+        // Store original values for change detection
+        const originalValues = {
+            contact_no: document.getElementById('contact_no').value,
+            symptoms: document.getElementById('symptoms').value,
+            appointment_time: document.getElementById('appointment_time').value
+        };
+
         // Function to set the minimum appointment date/time (today onwards)
         document.addEventListener("DOMContentLoaded", function () {
             let now = new Date();
@@ -45,44 +434,106 @@
             document.getElementById("appointment_time").min = now.toISOString().slice(0, 16);
         });
 
-        // Validate 10-digit mobile number
+        // Validate form
         function validateForm() {
-            let contact_no = document.getElementById("contact_no").value;
-            if (!/^\d{10}$/.test(contact_no)) {
-                alert("❌ Invalid contact number. Must be exactly 10 digits.");
-                return false;
+            const form = document.getElementById('editForm');
+            const phoneInput = document.getElementById("contact_no");
+            const phoneError = document.getElementById("phoneError");
+            const appointmentInput = document.getElementById("appointment_time");
+            const dateError = document.getElementById("dateError");
+
+            let isValid = true;
+
+            // Clear previous errors
+            phoneError.innerText = "";
+            dateError.innerText = "";
+
+            // Validate 10-digit mobile number
+            if (!/^\d{10}$/.test(phoneInput.value)) {
+                phoneError.innerText = "Phone number must be exactly 10 digits.";
+                phoneInput.focus();
+                isValid = false;
             }
-            return true;
+
+            // Validate appointment date (should not allow past dates)
+            const now = new Date();
+            const selectedDate = new Date(appointmentInput.value);
+
+            if (selectedDate < now) {
+                dateError.innerText = "Appointment date must be today or in the future.";
+                if (isValid) appointmentInput.focus();
+                isValid = false;
+            }
+
+            // Add loading state if form is valid
+            if (isValid) {
+                form.classList.add('loading');
+                const submitBtn = form.querySelector('button[type="submit"]');
+                submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Updating...';
+                submitBtn.disabled = true;
+            }
+
+            return isValid;
         }
+
+        // Check for changes and show indicator
+        function checkForChanges() {
+            const currentValues = {
+                contact_no: document.getElementById('contact_no').value,
+                symptoms: document.getElementById('symptoms').value,
+                appointment_time: document.getElementById('appointment_time').value
+            };
+
+            const hasChanges = Object.keys(originalValues).some(key => 
+                originalValues[key] !== currentValues[key]
+            );
+
+            const indicator = document.getElementById('changesIndicator');
+            if (hasChanges) {
+                indicator.classList.add('show');
+            } else {
+                indicator.classList.remove('show');
+            }
+        }
+
+        // Add change listeners
+        document.getElementById('contact_no').addEventListener('input', checkForChanges);
+        document.getElementById('symptoms').addEventListener('input', checkForChanges);
+        document.getElementById('appointment_time').addEventListener('change', checkForChanges);
+
+        // Real-time phone validation
+        document.getElementById('contact_no').addEventListener('input', function() {
+            const phoneError = document.getElementById('phoneError');
+            const phoneRegex = /^[0-9]{10}$/;
+            
+            if (this.value.length > 0 && !phoneRegex.test(this.value)) {
+                phoneError.innerText = "Phone number must be exactly 10 digits.";
+            } else {
+                phoneError.innerText = "";
+            }
+        });
+
+        // Real-time date validation
+        document.getElementById('appointment_time').addEventListener('change', function() {
+            const dateError = document.getElementById('dateError');
+            const now = new Date();
+            const selectedDate = new Date(this.value);
+            
+            if (selectedDate < now) {
+                dateError.innerText = "Appointment date must be today or in the future.";
+            } else {
+                dateError.innerText = "";
+            }
+        });
+
+        // Warn before leaving with unsaved changes
+       // window.addEventListener('beforeunload', function(e) {
+            //const indicator = document.getElementById('changesIndicator');
+           // if (indicator.classList.contains('show')) {
+              //  e.preventDefault();
+               // e.returnValue = '';
+           // }
+       // });
     </script>
-</head>
-
-<body>
-    <div class="form-container">
-        <h2 class="mb-4">Edit Appointment</h2>
-
-        <form action="/update-appointment/<%= appointment.id %>" method="POST" onsubmit="return validateForm()">
-            <input type="hidden" name="appointment_id" value="<%= appointment.id %>">
-
-            <div class="mb-3">
-                <label class="form-label">Contact Number</label>
-                <input type="text" class="form-control" id="contact_no" name="contact_no" value="<%= appointment.contact_no %>" required>
-            </div>
-
-            <div class="mb-3">
-                <label class="form-label">Symptoms</label>
-                <input type="text" class="form-control" name="symptoms" value="<%= appointment.symptoms %>" required>
-            </div>
-
-            <div class="mb-3">
-                <label class="form-label">Appointment Time</label>
-                <input type="datetime-local" class="form-control" id="appointment_time" name="appointment_time" 
-                    value="<%= appointment.appointment_time ? appointment.appointment_time.toISOString().slice(0,16) : '' %>" required>
-            </div>
-
-            <button type="submit" class="btn btn-success btn-custom">Update Appointment</button>
-            <a href="/patient-dashboard" class="btn btn-secondary btn-custom">Cancel</a>
-        </form>
-    </div>
 </body>
 </html>

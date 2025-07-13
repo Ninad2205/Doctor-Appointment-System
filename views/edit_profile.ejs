@@ -3,159 +3,714 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Edit Profile</title>
+    <title>Edit Profile - Healthcare Portal</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
+        :root {
+            --primary-color: #2563eb;
+            --primary-dark: #1d4ed8;
+            --secondary-color: #64748b;
+            --success-color: #10b981;
+            --success-dark: #059669;
+            --error-color: #ef4444;
+            --warning-color: #f59e0b;
+            --info-color: #0ea5e9;
+            --background-color: #f8fafc;
+            --card-background: #ffffff;
+            --text-primary: #1e293b;
+            --text-secondary: #64748b;
+            --text-muted: #94a3b8;
+            --border-color: #e2e8f0;
+            --disabled-bg: #f1f5f9;
+            --disabled-text: #64748b;
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
         body {
-            background: linear-gradient(135deg, #74ebd5, #acb6e5);
+            background-color: var(--background-color);
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.6;
+            color: var(--text-primary);
             min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-family: 'Poppins', sans-serif;
-            margin: 0;
+            padding: 20px 0;
         }
 
         .container {
-            background: rgba(255, 255, 255, 0.2);
-            backdrop-filter: blur(15px);
-            border-radius: 15px;
-            padding: 30px;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            max-width: 450px;
-            width: 100%;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .header {
             text-align: center;
+            margin-bottom: 40px;
+            padding: 20px 0;
         }
 
-        h2 {
-            font-size: 26px;
-            color: #fff;
-            margin-bottom: 20px;
+        .header h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-bottom: 8px;
+            letter-spacing: -0.025em;
         }
 
-        label {
-            display: block;
-            font-weight: 600;
-            text-align: left;
-            color: #fff;
-            margin: 8px 0 5px;
+        .header p {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+            margin: 0;
         }
 
-        input, select {
-            width: 100%;
-            padding: 10px;
-            border-radius: 8px;
-            border: none;
-            outline: none;
-            font-size: 16px;
-            background: rgba(255, 255, 255, 0.6);
-            box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.1);
+        .profile-card {
+            background: var(--card-background);
+            border-radius: 16px;
+            padding: 40px;
+            box-shadow: var(--shadow-lg);
+            border: 1px solid var(--border-color);
+            position: relative;
+            overflow: hidden;
         }
 
-        input[readonly] {
-            background: rgba(200, 200, 200, 0.6);
-            cursor: not-allowed;
+        .profile-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary-color), var(--info-color));
         }
 
-        .btn-custom {
-            width: 100%;
-            background: #4CAF50;
+        .profile-avatar {
+            text-align: center;
+            margin-bottom: 32px;
+        }
+
+        .avatar-container {
+            position: relative;
+            display: inline-block;
+        }
+
+        .avatar-circle {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary-color), var(--info-color));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
             color: white;
-            border: none;
-            padding: 12px;
-            font-size: 18px;
-            font-weight: bold;
+            font-weight: 600;
+            box-shadow: var(--shadow-md);
+            margin: 0 auto 16px;
+        }
+
+        .profile-info {
+            background: #f0f9ff;
+            border: 1px solid #0ea5e9;
             border-radius: 8px;
-            transition: 0.3s;
-            cursor: pointer;
+            padding: 16px;
+            margin-bottom: 32px;
         }
 
-        .btn-custom:hover {
-            background: #388E3C;
+        .profile-info h3 {
+            margin: 0 0 8px 0;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
 
-        .password-container {
+        .profile-info h3 i {
+            color: var(--info-color);
+        }
+
+        .profile-info p {
+            margin: 0;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        .form-section {
+            margin-bottom: 32px;
+        }
+
+        .form-section:last-of-type {
+            margin-bottom: 0;
+        }
+
+        .section-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .section-title i {
+            color: var(--primary-color);
+            font-size: 1.1rem;
+        }
+
+        .form-group {
+            margin-bottom: 24px;
+        }
+
+        .form-label {
+            font-weight: 500;
+            color: var(--text-primary);
+            margin-bottom: 8px;
+            display: block;
+            font-size: 0.95rem;
+        }
+
+        .form-control, .form-select {
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            padding: 12px 16px;
+            font-size: 1rem;
+            transition: all 0.2s ease;
+            background-color: var(--card-background);
+            color: var(--text-primary);
+        }
+
+        .form-control:focus, .form-select:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+
+        .form-control:disabled, .form-control[readonly] {
+            background-color: var(--disabled-bg);
+            color: var(--disabled-text);
+            cursor: not-allowed;
+            border-color: var(--border-color);
+        }
+
+        .form-control::placeholder {
+            color: var(--text-secondary);
+        }
+
+        .input-group {
             position: relative;
         }
 
-        .toggle-password {
+        .input-icon {
             position: absolute;
-            right: 10px;
+            left: 16px;
             top: 50%;
             transform: translateY(-50%);
-            cursor: pointer;
+            color: var(--text-secondary);
+            z-index: 2;
+        }
+
+        .input-group .form-control {
+            padding-left: 48px;
+        }
+
+        .password-toggle {
+            position: absolute;
+            right: 16px;
+            top: 50%;
+            transform: translateY(-50%);
             background: none;
             border: none;
-            color: #555;
-            font-weight: bold;
-            font-size: 14px;
+            color: var(--text-secondary);
+            cursor: pointer;
+            font-size: 1rem;
+            padding: 0;
+            z-index: 2;
+        }
+
+        .password-toggle:hover {
+            color: var(--primary-color);
+        }
+
+        .readonly-badge {
+            background: var(--disabled-bg);
+            color: var(--disabled-text);
+            font-size: 0.75rem;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-weight: 500;
+            margin-left: 8px;
+        }
+
+        .error-message {
+            color: var(--error-color);
+            font-size: 0.875rem;
+            margin-top: 6px;
+            display: block;
+            font-weight: 500;
+        }
+
+        .success-message {
+            color: var(--success-color);
+            font-size: 0.875rem;
+            margin-top: 6px;
+            display: block;
+            font-weight: 500;
+        }
+
+        .form-help {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+            margin-top: 6px;
+        }
+
+        .required {
+            color: var(--error-color);
+            margin-left: 2px;
+        }
+
+        .optional {
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            font-weight: 400;
+        }
+
+        .btn-success {
+            background-color: var(--success-color);
+            border: none;
+            padding: 14px 32px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 1rem;
+            transition: all 0.2s ease;
+            box-shadow: var(--shadow-sm);
+            text-transform: none;
+            letter-spacing: 0.025em;
+        }
+
+        .btn-success:hover {
+            background-color: var(--success-dark);
+            transform: translateY(-1px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .btn-success:active {
+            transform: translateY(0);
+        }
+
+        .btn-secondary {
+            background-color: transparent;
+            border: 2px solid var(--border-color);
+            color: var(--text-secondary);
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: 500;
+            font-size: 1rem;
+            transition: all 0.2s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-secondary:hover {
+            background-color: var(--background-color);
+            color: var(--text-primary);
+            text-decoration: none;
+            border-color: var(--text-secondary);
+        }
+
+        .button-group {
+            display: flex;
+            gap: 16px;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 32px;
+            padding-top: 24px;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .changes-indicator {
+            background: #dbeafe;
+            border: 1px solid #3b82f6;
+            border-radius: 8px;
+            padding: 12px;
+            margin-bottom: 24px;
+            display: none;
+        }
+
+        .changes-indicator.show {
+            display: block;
+        }
+
+        .changes-indicator i {
+            color: var(--primary-color);
+            margin-right: 8px;
+        }
+
+        .changes-indicator span {
+            color: var(--text-primary);
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        .loading {
+            opacity: 0.6;
+            pointer-events: none;
+        }
+
+        .password-strength {
+            margin-top: 8px;
+            font-size: 0.875rem;
+        }
+
+        .strength-weak { color: var(--error-color); }
+        .strength-medium { color: var(--warning-color); }
+        .strength-strong { color: var(--success-color); }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 0 16px;
+            }
+            
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .profile-card {
+                padding: 24px;
+            }
+            
+            .avatar-circle {
+                width: 100px;
+                height: 100px;
+                font-size: 2.5rem;
+            }
+            
+            .button-group {
+                flex-direction: column-reverse;
+                gap: 12px;
+            }
+            
+            .btn-success, .btn-secondary {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .header h1 {
+                font-size: 1.75rem;
+            }
+            
+            .profile-card {
+                padding: 20px;
+            }
         }
     </style>
 </head>
 <body>
-
     <div class="container">
-        <h2>Edit Profile</h2>
+        <div class="header">
+            <h1><i class="fas fa-user-edit"></i> Edit Profile</h1>
+            <p>Update your personal information and account settings</p>
+        </div>
 
-        <!-- Profile Edit Form -->
-        <form action="/edit-profile" method="POST">
-            <label>Patient ID:</label>
-            <input type="text" name="patient_id" value="<%= user.patient_id %>" readonly>
-        
-            <label>Username:</label>
-            <input type="text" name="username" value="<%= user.username %>" readonly>
-        
-            <label>Name:</label>
-            <input type="text" name="name" id="name" value="<%= user.name %>" required oninput="validateName(this)">
-        
-            <label>Contact Number:</label>
-            <input type="text" name="contact_no" id="contact_no" value="<%= user.contact_no %>" required oninput="validateContact(this)">
-        
-            <label>Gender:</label>
-            <select name="gender" required>
-                <option value="male" <%= user.gender === 'male' ? 'selected' : '' %>>Male</option>
-                <option value="female" <%= user.gender === 'female' ? 'selected' : '' %>>Female</option>
-                <option value="other" <%= user.gender === 'other' ? 'selected' : '' %>>Other</option>
-            </select>
-        
-            <label>New Password (Optional):</label>
-            <div class="password-container">
-                <input type="password" name="password" id="password" placeholder="Enter new password">
-                <button type="button" class="toggle-password" id="togglePassword">Show</button>
+        <div class="profile-card">
+            <div class="profile-avatar">
+                <div class="avatar-container">
+                    <div class="avatar-circle">
+                        <i class="fas fa-user"></i>
+                    </div>
+                </div>
             </div>
-        
-            <button type="submit" class="btn-custom">Save Changes</button>
-        </form>
+
+            <div class="profile-info">
+                <h3><i class="fas fa-info-circle"></i> Profile Information</h3>
+                <p>Update your personal details below. Required fields are marked with an asterisk (*)</p>
+            </div>
+
+            <div class="changes-indicator" id="changesIndicator">
+                <i class="fas fa-exclamation-triangle"></i>
+                <span>You have unsaved changes</span>
+            </div>
+
+            <form action="/edit-profile" method="POST" id="profileForm" onsubmit="return validateForm()">
+                <div class="form-section">
+                    <div class="section-title">
+                        <i class="fas fa-id-card"></i>
+                        Account Information
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="patient_id" class="form-label">
+                            Patient ID 
+                            <span class="readonly-badge">Read Only</span>
+                        </label>
+                        <div class="input-group">
+                            <i class="fas fa-id-badge input-icon"></i>
+                            <input type="text" class="form-control" id="patient_id" name="patient_id" value="<%= user.patient_id %>" readonly>
+                        </div>
+                        <div class="form-help">This ID is automatically assigned and cannot be changed</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="username" class="form-label">
+                            Username 
+                            <span class="readonly-badge">Read Only</span>
+                        </label>
+                        <div class="input-group">
+                            <i class="fas fa-user input-icon"></i>
+                            <input type="text" class="form-control" id="username" name="username" value="<%= user.username %>" readonly>
+                        </div>
+                        <div class="form-help">Username cannot be changed after account creation</div>
+                    </div>
+                </div>
+
+                <div class="form-section">
+                    <div class="section-title">
+                        <i class="fas fa-user-circle"></i>
+                        Personal Information
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="name" class="form-label">Full Name <span class="required">*</span></label>
+                        <div class="input-group">
+                            <i class="fas fa-user input-icon"></i>
+                            <input type="text" class="form-control" id="name" name="name" value="<%= user.name %>" required placeholder="Enter your full name" oninput="validateName(this)">
+                        </div>
+                        <small class="error-message" id="nameError"></small>
+                        <div class="form-help">Enter your full name (letters and spaces only)</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="contact_no" class="form-label">Contact Number <span class="required">*</span></label>
+                        <div class="input-group">
+                            <i class="fas fa-phone input-icon"></i>
+                            <input type="tel" class="form-control" id="contact_no" name="contact_no" value="<%= user.contact_no %>" required placeholder="Enter 10-digit phone number" oninput="validateContact(this)">
+                        </div>
+                        <small class="error-message" id="contactError"></small>
+                        <div class="form-help">Please enter a valid 10-digit phone number</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="gender" class="form-label">Gender <span class="required">*</span></label>
+                        <select class="form-select" id="gender" name="gender" required>
+                            <option value="">Select Gender</option>
+                            <option value="male" <%= user.gender === 'male' ? 'selected' : '' %>>Male</option>
+                            <option value="female" <%= user.gender === 'female' ? 'selected' : '' %>>Female</option>
+                            <option value="other" <%= user.gender === 'other' ? 'selected' : '' %>>Other</option>
+                        </select>
+                        <div class="form-help">Select your gender identity</div>
+                    </div>
+                </div>
+
+                <div class="form-section">
+                    <div class="section-title">
+                        <i class="fas fa-lock"></i>
+                        Security Settings
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="password" class="form-label">New Password <span class="optional">(Optional)</span></label>
+                        <div class="input-group">
+                            <i class="fas fa-lock input-icon"></i>
+                            <input type="password" class="form-control" id="password" name="password" placeholder="Enter new password (leave blank to keep current)">
+                            <button type="button" class="password-toggle" id="togglePassword">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                        </div>
+                        <div class="password-strength" id="passwordStrength"></div>
+                        <div class="form-help">Leave blank to keep your current password. Minimum 6 characters recommended</div>
+                    </div>
+                </div>
+
+                <div class="button-group">
+                    <a href="/patient-dashboard" class="btn-secondary">
+                        <i class="fas fa-arrow-left"></i>
+                        Back to Dashboard
+                    </a>
+                    <button type="submit" class="btn btn-success">
+                        <i class="fas fa-save"></i>
+                        Save Changes
+                    </button>
+                </div>
+            </form>
+        </div>
     </div>
 
     <script>
+        // Store original values for change detection
+        const originalValues = {
+            name: document.getElementById('name').value,
+            contact_no: document.getElementById('contact_no').value,
+            gender: document.getElementById('gender').value,
+            password: ''
+        };
+
         // Validate Name - Only allows alphabets and spaces
         function validateName(input) {
+            const nameError = document.getElementById('nameError');
+            const originalValue = input.value;
             input.value = input.value.replace(/[^a-zA-Z\s]/g, '');
+            
+            if (input.value.length < 2) {
+                nameError.textContent = 'Name must be at least 2 characters long';
+            } else if (input.value !== originalValue) {
+                nameError.textContent = 'Only letters and spaces are allowed';
+            } else {
+                nameError.textContent = '';
+            }
+            
+            checkForChanges();
         }
 
         // Validate Contact Number - Only allows 10 digits
         function validateContact(input) {
+            const contactError = document.getElementById('contactError');
             input.value = input.value.replace(/\D/g, '').slice(0, 10);
+            
+            if (input.value.length > 0 && input.value.length < 10) {
+                contactError.textContent = 'Phone number must be exactly 10 digits';
+            } else if (input.value.length === 10) {
+                contactError.textContent = '';
+            } else {
+                contactError.textContent = '';
+            }
+            
+            checkForChanges();
         }
 
-        // Toggle Password Visibility
-        document.addEventListener("DOMContentLoaded", function () {
-            let passwordField = document.getElementById("password");
-            let toggleBtn = document.getElementById("togglePassword");
+        // Password strength checker
+        function checkPasswordStrength(password) {
+            const strengthDiv = document.getElementById('passwordStrength');
+            if (password.length === 0) {
+                strengthDiv.textContent = '';
+                return;
+            }
+            
+            let strength = 0;
+            if (password.length >= 6) strength += 1;
+            if (password.match(/[a-z]/)) strength += 1;
+            if (password.match(/[A-Z]/)) strength += 1;
+            if (password.match(/[0-9]/)) strength += 1;
+            if (password.match(/[^a-zA-Z0-9]/)) strength += 1;
+            
+            if (strength <= 2) {
+                strengthDiv.textContent = 'Weak password';
+                strengthDiv.className = 'password-strength strength-weak';
+            } else if (strength <= 3) {
+                strengthDiv.textContent = 'Medium password';
+                strengthDiv.className = 'password-strength strength-medium';
+            } else {
+                strengthDiv.textContent = 'Strong password';
+                strengthDiv.className = 'password-strength strength-strong';
+            }
+        }
 
-            toggleBtn.addEventListener("click", function () {
-                if (passwordField.type === "password") {
-                    passwordField.type = "text";
-                    toggleBtn.innerText = "Hide";
+        // Check for changes and show indicator
+        function checkForChanges() {
+            const currentValues = {
+                name: document.getElementById('name').value,
+                contact_no: document.getElementById('contact_no').value,
+                gender: document.getElementById('gender').value,
+                password: document.getElementById('password').value
+            };
+
+            const hasChanges = Object.keys(originalValues).some(key => 
+                originalValues[key] !== currentValues[key]
+            );
+
+            const indicator = document.getElementById('changesIndicator');
+            if (hasChanges) {
+                indicator.classList.add('show');
+            } else {
+                indicator.classList.remove('show');
+            }
+        }
+
+        // Form validation
+        function validateForm() {
+            const form = document.getElementById('profileForm');
+            const nameInput = document.getElementById('name');
+            const contactInput = document.getElementById('contact_no');
+            const nameError = document.getElementById('nameError');
+            const contactError = document.getElementById('contactError');
+            
+            let isValid = true;
+
+            // Clear previous errors
+            nameError.textContent = '';
+            contactError.textContent = '';
+
+            // Validate name
+            if (nameInput.value.length < 2) {
+                nameError.textContent = 'Name must be at least 2 characters long';
+                nameInput.focus();
+                isValid = false;
+            }
+
+            // Validate contact
+            if (contactInput.value.length !== 10) {
+                contactError.textContent = 'Phone number must be exactly 10 digits';
+                if (isValid) contactInput.focus();
+                isValid = false;
+            }
+
+            // Add loading state if form is valid
+            if (isValid) {
+                form.classList.add('loading');
+                const submitBtn = form.querySelector('button[type="submit"]');
+                submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving...';
+                submitBtn.disabled = true;
+            }
+
+            return isValid;
+        }
+
+        // Initialize event listeners
+        document.addEventListener('DOMContentLoaded', function() {
+            // Password toggle functionality
+            const passwordField = document.getElementById('password');
+            const toggleBtn = document.getElementById('togglePassword');
+
+            toggleBtn.addEventListener('click', function() {
+                const icon = toggleBtn.querySelector('i');
+                if (passwordField.type === 'password') {
+                    passwordField.type = 'text';
+                    icon.classList.remove('fa-eye');
+                    icon.classList.add('fa-eye-slash');
                 } else {
-                    passwordField.type = "password";
-                    toggleBtn.innerText = "Show";
+                    passwordField.type = 'password';
+                    icon.classList.remove('fa-eye-slash');
+                    icon.classList.add('fa-eye');
+                }
+            });
+
+            // Password strength checker
+            passwordField.addEventListener('input', function() {
+                checkPasswordStrength(this.value);
+                checkForChanges();
+            });
+
+            // Change detection for other fields
+            document.getElementById('gender').addEventListener('change', checkForChanges);
+
+            // Warn before leaving with unsaved changes
+            window.addEventListener('beforeunload', function(e) {
+                const indicator = document.getElementById('changesIndicator');
+                if (indicator.classList.contains('show')) {
+                    e.preventDefault();
+                    e.returnValue = '';
                 }
             });
         });
     </script>
-
 </body>
 </html>

@@ -5,107 +5,467 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Doctor Registration</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
         body {
-            background: linear-gradient(135deg, #74ebd5, #acb6e5);
+            background: linear-gradient(135deg, #0f4c75 0%, #3282b8 50%, #bbe1fa 100%);
             min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-family: Arial, sans-serif;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            padding: 20px;
         }
-        .glass-form {
-            background: rgba(255, 255, 255, 0.2);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border-radius: 15px;
-            padding: 30px;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            max-width: 600px;
-            width: 100%;
+
+        .container {
+            max-width: 850px;
+            margin: 0 auto;
+            padding: 40px 0;
         }
-        .form-title {
+
+        .registration-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 25px 45px rgba(0, 0, 0, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .registration-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background: linear-gradient(90deg, #0f4c75, #3282b8);
+        }
+
+        .form-header {
             text-align: center;
+            margin-bottom: 35px;
+            position: relative;
+        }
+
+        .form-header .icon-container {
+            display: inline-block;
+            width: 70px;
+            height: 70px;
+            background: linear-gradient(135deg, #0f4c75, #3282b8);
+            border-radius: 50%;
             margin-bottom: 20px;
-            font-weight: bold;
-            font-size: 1.5rem;
-            color: #333;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 8px 25px rgba(15, 76, 117, 0.3);
         }
+
+        .form-header .icon-container i {
+            font-size: 2rem;
+            color: white;
+        }
+
+        .form-header h1 {
+            font-size: 2.4rem;
+            font-weight: 700;
+            color: #2c3e50;
+            margin-bottom: 8px;
+            letter-spacing: -0.5px;
+        }
+
+        .form-header p {
+            color: #7f8c8d;
+            font-size: 1.1rem;
+            margin: 0;
+        }
+
+        .form-section {
+            margin-bottom: 25px;
+        }
+
+        .form-label {
+            font-weight: 600;
+            color: #34495e;
+            margin-bottom: 8px;
+            font-size: 0.95rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .form-label i {
+            color: #3282b8;
+            width: 16px;
+            text-align: center;
+        }
+
+        .form-control, .form-select {
+            border: 2px solid #e9ecef;
+            border-radius: 12px;
+            padding: 14px 18px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            background: #fff;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
+        }
+
+        .form-control:focus, .form-select:focus {
+            border-color: #3282b8;
+            box-shadow: 0 0 0 3px rgba(50, 130, 184, 0.1);
+            outline: none;
+        }
+
+        .form-control::placeholder {
+            color: #a0a9b8;
+            font-size: 0.95rem;
+        }
+
+        .input-group {
+            position: relative;
+        }
+
         .input-group-text {
+            background: #f8f9fa;
+            border: 2px solid #e9ecef;
+            border-left: none;
+            border-radius: 0 12px 12px 0;
             cursor: pointer;
-            background: rgba(255, 255, 255, 0.5);
-            border: 1px solid rgba(255, 255, 255, 0.6);
+            transition: all 0.3s ease;
+            padding: 14px 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
+
+        .input-group-text:hover {
+            background: #e9ecef;
+            color: #3282b8;
+        }
+
+        .input-group .form-control {
+            border-right: none;
+            border-radius: 12px 0 0 12px;
+        }
+
+        .input-group .form-control:focus + .input-group-text {
+            border-color: #3282b8;
+        }
+
         .btn-primary {
-            background-color: #007bff;
+            background: linear-gradient(135deg, #0f4c75, #3282b8);
             border: none;
+            border-radius: 12px;
+            padding: 16px 35px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            transition: all 0.3s ease;
+            box-shadow: 0 6px 20px rgba(15, 76, 117, 0.4);
         }
+
         .btn-primary:hover {
-            background-color: #0056b3;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(15, 76, 117, 0.5);
+            background: linear-gradient(135deg, #0d3a5a, #2a6b96);
         }
+
+        .btn-primary:active {
+            transform: translateY(0);
+        }
+
+        .text-danger {
+            color: #e74c3c !important;
+            font-size: 0.875rem;
+            margin-top: 4px;
+            display: block;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .form-row-triple {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 20px;
+        }
+
+        .form-footer {
+            text-align: center;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #e9ecef;
+        }
+
+        .form-footer p {
+            color: #7f8c8d;
+            font-size: 0.9rem;
+            margin: 0;
+        }
+
+        /* Professional specialization styling */
+        .specialization-container {
+            position: relative;
+        }
+
+        .specialization-container::after {
+            content: '\f0d7';
+            font-family: 'Font Awesome 6 Free';
+            font-weight: 900;
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #3282b8;
+            pointer-events: none;
+        }
+
+        /* Responsive Design */
         @media (max-width: 768px) {
-            .glass-form { padding: 20px; }
-            .form-title { font-size: 1.25rem; }
+            .registration-card {
+                padding: 30px 20px;
+                margin: 10px;
+            }
+
+            .form-header h1 {
+                font-size: 2rem;
+            }
+
+            .form-row, .form-row-triple {
+                grid-template-columns: 1fr;
+                gap: 15px;
+            }
+
+            .container {
+                padding: 20px 0;
+            }
+        }
+
+        /* Animation */
+        .registration-card {
+            animation: slideUp 0.6s ease-out;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Field validation styling */
+        .form-control.is-invalid {
+            border-color: #e74c3c;
+        }
+
+        .form-control.is-valid {
+            border-color: #27ae60;
+        }
+
+        /* Loading state for button */
+        .btn-primary.loading {
+            pointer-events: none;
+            opacity: 0.7;
+        }
+
+        .btn-primary.loading::after {
+            content: '';
+            width: 16px;
+            height: 16px;
+            border: 2px solid #fff;
+            border-top: 2px solid transparent;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            display: inline-block;
+            margin-left: 8px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Professional medical theme colors */
+        .medical-accent {
+            color: #0f4c75;
+        }
+
+        .medical-badge {
+            background: linear-gradient(135deg, #0f4c75, #3282b8);
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
     </style>
 </head>
 <body>
-    <div class="glass-form">
-        <div class="form-title">Doctor Registration</div>
-        <form action="/register-doctor" method="POST" onsubmit="return validateForm()">
-            <div class="mb-3">
-                <label class="form-label">Doctor ID</label>
-                <input type="number" class="form-control" name="doctor_id" required>
-            </div>
-            <div class="mb-3">
-                <label class="form-label">Full Name</label>
-                <input type="text" class="form-control" name="name" required>
-            </div>
-            <div class="mb-3">
-                <label class="form-label">Username</label>
-                <input type="text" class="form-control" name="username" required>
-            </div>
-            <div class="mb-3">
-                <label class="form-label">Password</label>
-                <div class="input-group">
-                    <input type="password" class="form-control" name="password" id="password" required>
-                    <span class="input-group-text" onclick="togglePassword()">👁️</span>
+    <div class="container">
+        <div class="registration-card">
+            <div class="form-header">
+                <div class="icon-container">
+                    <i class="fas fa-user-md"></i>
                 </div>
+                <h1>Doctor Registration</h1>
+                <p>Join our medical professionals network</p>
             </div>
-            <div class="mb-3">
-                <label class="form-label">Contact No</label>
-                <input type="tel" class="form-control" id="contact_no" name="contact_no" required maxlength="10" pattern="[0-9]{10}" oninput="validatePhoneNumber(this)">
-                <small class="text-danger" id="phoneError"></small>
+            
+            <form action="/register-doctor" method="POST" onsubmit="return validateForm()">
+                <div class="form-section">
+                    <label class="form-label">
+                        <i class="fas fa-id-badge"></i>
+                        Doctor ID
+                    </label>
+                    <input type="number" class="form-control" name="doctor_id" placeholder="Enter your unique doctor ID" required>
+                </div>
+
+                <div class="form-section">
+                    <label class="form-label">
+                        <i class="fas fa-user"></i>
+                        Full Name
+                    </label>
+                    <input type="text" class="form-control" name="name" placeholder="Enter your full name" required>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-section">
+                        <label class="form-label">
+                            <i class="fas fa-at"></i>
+                            Username
+                        </label>
+                        <input type="text" class="form-control" name="username" placeholder="Choose a username" required>
+                    </div>
+
+                    <div class="form-section">
+                        <label class="form-label">
+                            <i class="fas fa-lock"></i>
+                            Password
+                        </label>
+                        <div class="input-group">
+                            <input type="password" class="form-control" name="password" id="password" placeholder="Create a secure password" required>
+                            <span class="input-group-text" onclick="togglePassword()">
+                                <i class="fas fa-eye" id="toggleIcon"></i>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-section">
+                        <label class="form-label">
+                            <i class="fas fa-phone"></i>
+                            Contact Number
+                        </label>
+                        <input type="tel" class="form-control" id="contact_no" name="contact_no" placeholder="Enter 10-digit number" required maxlength="10" pattern="[0-9]{10}" oninput="validatePhoneNumber(this)">
+                        <small class="text-danger" id="phoneError"></small>
+                    </div>
+
+                    <div class="form-section">
+                        <label class="form-label">
+                            <i class="fas fa-venus-mars"></i>
+                            Gender
+                        </label>
+                        <select class="form-select" name="gender" required>
+                            <option value="" disabled selected>Select your gender</option>
+                            <option value="male">Male</option>
+                            <option value="female">Female</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-section">
+                    <label for="specialization" class="form-label">
+                        <i class="fas fa-stethoscope"></i>
+                        Medical Specialization
+                    </label>
+                    <div class="specialization-container">
+                        <input type="text" class="form-control" id="specialization" name="specialization" placeholder="e.g., Cardiology, Neurology, Pediatrics" required>
+                    </div>
+                </div>
+
+                <div class="d-grid" style="margin-top: 35px;">
+                    <button type="submit" class="btn btn-primary" id="submitBtn">
+                        <i class="fas fa-user-plus"></i>
+                        Register Doctor
+                    </button>
+                </div>
+            </form>
+
+            <div class="form-footer">
+                <p>
+                    <span class="medical-badge">Medical Professional</span>
+                    Secure registration for healthcare providers
+                </p>
             </div>
-            <div class="mb-3">
-                <label for="specialization" class="form-label">Specialization:</label>
-                <input type="text" class="form-control" id="specialization" name="specialization" required>
-            </div>            
-            <div class="mb-3">
-                <label class="form-label">Gender</label>
-                <select class="form-select" name="gender" required>
-                    <option value="" disabled selected>Select gender</option>
-                    <option value="male">Male</option>
-                    <option value="female">Female</option>
-                    <option value="other">Other</option>
-                </select>
-            </div>
-            <div class="d-grid">
-                <button type="submit" class="btn btn-primary">Register</button>
-            </div>
-        </form>
+        </div>
     </div>
 
     <script>
         function validatePhoneNumber(input) {
             input.value = input.value.replace(/[^0-9]/g, '').slice(0, 10);
+            if (input.value.length === 10) {
+                input.classList.remove('is-invalid');
+                input.classList.add('is-valid');
+                document.getElementById("phoneError").textContent = "";
+            } else {
+                input.classList.add('is-invalid');
+                input.classList.remove('is-valid');
+                if (input.value.length > 0) {
+                    document.getElementById("phoneError").textContent = "Please enter a valid 10-digit number.";
+                }
+            }
         }
 
         function togglePassword() {
             const passwordInput = document.getElementById("password");
-            passwordInput.type = passwordInput.type === "password" ? "text" : "password";
+            const toggleIcon = document.getElementById("toggleIcon");
+            
+            if (passwordInput.type === "password") {
+                passwordInput.type = "text";
+                toggleIcon.classList.remove('fa-eye');
+                toggleIcon.classList.add('fa-eye-slash');
+            } else {
+                passwordInput.type = "password";
+                toggleIcon.classList.remove('fa-eye-slash');
+                toggleIcon.classList.add('fa-eye');
+            }
         }
+
+        function validateForm() {
+            const contactNo = document.getElementById("contact_no").value;
+            if (contactNo.length !== 10) {
+                document.getElementById("phoneError").textContent = "Please enter a valid 10-digit number.";
+                return false;
+            }
+            return true;
+        }
+
+        // Add loading state to submit button
+        document.querySelector('form').addEventListener('submit', function(e) {
+            if (validateForm()) {
+                const submitBtn = document.getElementById('submitBtn');
+                submitBtn.classList.add('loading');
+                submitBtn.innerHTML = '<i class="fas fa-user-plus"></i> Registering...';
+            }
+        });
     </script>
 </body>
 </html>

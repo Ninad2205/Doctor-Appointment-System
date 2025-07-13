@@ -3,86 +3,405 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Submit Feedback</title>
+    <title>Healthcare Feedback Portal</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #3498db;
+            --accent-color: #e74c3c;
+            --success-color: #27ae60;
+            --light-bg: #f8f9fa;
+            --dark-text: #2c3e50;
+            --light-text: #7f8c8d;
+            --border-color: #e9ecef;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
         body {
-            background: linear-gradient(135deg, #74ebd5, #acb6e5);
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: var(--dark-text);
+            position: relative;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 20% 20%, rgba(255, 255, 255, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(255, 255, 255, 0.1) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .container {
             min-height: 100vh;
             display: flex;
-            justify-content: center;
             align-items: center;
-            font-family: Arial, sans-serif;
+            justify-content: center;
+            padding: 20px;
         }
-        .glass-form {
-            background: rgba(255, 255, 255, 0.2);
-            backdrop-filter: blur(12px);
-            border-radius: 15px;
-            padding: 30px;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            max-width: 600px;
+
+        .feedback-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 
+                0 20px 40px rgba(0, 0, 0, 0.1),
+                0 0 0 1px rgba(255, 255, 255, 0.2);
+            max-width: 650px;
             width: 100%;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            position: relative;
+            overflow: hidden;
         }
-        .form-title {
+
+        .feedback-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--secondary-color), var(--success-color));
+            border-radius: 20px 20px 0 0;
+        }
+
+        .header-section {
             text-align: center;
-            margin-bottom: 20px;
-            font-weight: bold;
-            font-size: 1.5rem;
-            color: #333;
+            margin-bottom: 35px;
         }
+
+        .header-icon {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, var(--secondary-color), var(--success-color));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            box-shadow: 0 8px 20px rgba(52, 152, 219, 0.3);
+        }
+
+        .header-icon i {
+            color: white;
+            font-size: 24px;
+        }
+
+        .form-title {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-bottom: 8px;
+            letter-spacing: -0.5px;
+        }
+
+        .form-subtitle {
+            color: var(--light-text);
+            font-size: 1rem;
+            line-height: 1.5;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        .form-label {
+            font-weight: 600;
+            color: var(--primary-color);
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .form-label i {
+            color: var(--secondary-color);
+            font-size: 14px;
+        }
+
         .form-control, .form-select {
-            background: rgba(255, 255, 255, 0.5);
-            border: 1px solid rgba(255, 255, 255, 0.6);
+            background: white;
+            border: 2px solid var(--border-color);
+            border-radius: 12px;
+            padding: 14px 18px;
+            font-size: 15px;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
         }
-        .btn-primary {
-            background-color: #007bff;
+
+        .form-control:focus, .form-select:focus {
+            border-color: var(--secondary-color);
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+            outline: none;
+        }
+
+        .form-control::placeholder {
+            color: var(--light-text);
+        }
+
+        .rating-options {
+            display: flex;
+            gap: 10px;
+            margin-top: 8px;
+        }
+
+        .rating-option {
+            flex: 1;
+            padding: 12px;
+            border: 2px solid var(--border-color);
+            border-radius: 10px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: white;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .rating-option:hover {
+            border-color: var(--secondary-color);
+            background: rgba(52, 152, 219, 0.05);
+        }
+
+        .rating-option.selected {
+            border-color: var(--secondary-color);
+            background: var(--secondary-color);
+            color: white;
+        }
+
+        .submit-btn {
+            background: linear-gradient(135deg, var(--secondary-color), var(--success-color));
             border: none;
+            border-radius: 12px;
+            padding: 16px 32px;
+            font-size: 16px;
+            font-weight: 600;
+            color: white;
+            width: 100%;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(52, 152, 219, 0.3);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
-        .btn-primary:hover {
-            background-color: #0056b3;
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(52, 152, 219, 0.4);
+        }
+
+        .submit-btn:active {
+            transform: translateY(0);
+        }
+
+        .back-btn {
+            background: white;
+            border: 2px solid var(--border-color);
+            border-radius: 12px;
+            padding: 12px 24px;
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--primary-color);
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+            margin-top: 20px;
+        }
+
+        .back-btn:hover {
+            background: var(--light-bg);
+            color: var(--primary-color);
+            text-decoration: none;
+            border-color: var(--secondary-color);
+        }
+
+        .actions-section {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 30px;
+        }
+
+        .required-indicator {
+            color: var(--accent-color);
+            margin-left: 4px;
+        }
+
+        @media (max-width: 768px) {
+            .feedback-card {
+                padding: 30px 20px;
+                margin: 10px;
+            }
+            
+            .form-title {
+                font-size: 1.5rem;
+            }
+            
+            .rating-options {
+                flex-wrap: wrap;
+            }
+            
+            .rating-option {
+                flex: 1 1 calc(50% - 5px);
+                margin-bottom: 10px;
+            }
+            
+            .actions-section {
+                flex-direction: column;
+                gap: 15px;
+            }
+        }
+
+        .form-floating {
+            position: relative;
+        }
+
+        .form-floating > .form-control {
+            padding: 1rem 0.75rem;
+        }
+
+        .form-floating > label {
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 100%;
+            padding: 1rem 0.75rem;
+            pointer-events: none;
+            border: 1px solid transparent;
+            transform-origin: 0 0;
+            transition: opacity 0.1s ease-in-out, transform 0.1s ease-in-out;
         }
     </style>
 </head>
 <body>
-    <div class="glass-form">
-        <div class="form-title">Submit Feedback</div>
-        <form action="/submit-feedback" method="POST">
-            <input type="hidden" name="patient_id" value="<%= user.id %>">
-            
-            <div class="mb-3">
-                <label for="doctorId" class="form-label">Select Doctor</label>
-                <select class="form-select" name="doctor_id" required>
-                    <option value="" disabled selected>-- Select a Doctor --</option> <!-- Prevent default selection -->
-                    <% doctors.forEach(doctor => { %>
-                        <option value="<%= doctor.doctor_id %>"><%= doctor.name %></option>
-                    <% }); %>
-                </select>
+    <div class="container">
+        <div class="feedback-card">
+            <div class="header-section">
+                <div class="header-icon">
+                    <i class="fas fa-comment-medical"></i>
+                </div>
+                <h1 class="form-title">Healthcare Feedback</h1>
+                <p class="form-subtitle">Help us improve our services by sharing your experience</p>
             </div>
 
-            <div class="mb-3">
-                <label for="rating" class="form-label">Rating (1-5)</label>
-                <select class="form-select" name="rating" required>
-                    <option value="" disabled selected>-- Select Rating --</option>
-                    <option value="1">1 - Poor</option>
-                    <option value="2">2 - Fair</option>
-                    <option value="3">3 - Good</option>
-                    <option value="4">4 - Very Good</option>
-                    <option value="5">5 - Excellent</option>
-                </select>
-            </div>
+            <form action="/submit-feedback" method="POST">
+                <input type="hidden" name="patient_id" value="<%= user.id %>">
+                
+                <div class="form-group">
+                    <label for="doctorId" class="form-label">
+                        <i class="fas fa-user-md"></i>
+                        Select Healthcare Provider
+                        <span class="required-indicator">*</span>
+                    </label>
+                    <select class="form-select" name="doctor_id" id="doctorId" required>
+                        <option value="" disabled selected>Choose your healthcare provider</option>
+                        <% doctors.forEach(doctor => { %>
+                            <option value="<%= doctor.doctor_id %>">Dr. <%= doctor.name %></option>
+                        <% }); %>
+                    </select>
+                </div>
 
-            <div class="mb-3">
-                <label for="comment" class="form-label">Feedback</label>
-                <textarea class="form-control" name="comment" rows="3" required></textarea>
-            </div>
+                <div class="form-group">
+                    <label for="rating" class="form-label">
+                        <i class="fas fa-star"></i>
+                        Service Rating
+                        <span class="required-indicator">*</span>
+                    </label>
+                    <select class="form-select" name="rating" id="rating" required>
+                        <option value="" disabled selected>Rate your experience</option>
+                        <option value="5">⭐⭐⭐⭐⭐ Excellent</option>
+                        <option value="4">⭐⭐⭐⭐ Very Good</option>
+                        <option value="3">⭐⭐⭐ Good</option>
+                        <option value="2">⭐⭐ Fair</option>
+                        <option value="1">⭐ Needs Improvement</option>
+                    </select>
+                </div>
 
-            <button type="submit" class="btn btn-primary w-100">Submit Feedback</button>
-            
-            <div style="text-align: right;">
-                <a href="/patient-dashboard" class="btn btn-secondary mt-3">Back</a>
-            </div>
-        </form>
+                <div class="form-group">
+                    <label for="comment" class="form-label">
+                        <i class="fas fa-comments"></i>
+                        Your Feedback
+                        <span class="required-indicator">*</span>
+                    </label>
+                    <textarea 
+                        class="form-control" 
+                        name="comment" 
+                        id="comment" 
+                        rows="4" 
+                        required
+                        placeholder="Please share your detailed feedback about the service, treatment, or overall experience..."
+                    ></textarea>
+                </div>
+
+                <div class="actions-section">
+                    <a href="/patient-dashboard" class="back-btn">
+                        <i class="fas fa-arrow-left"></i>
+                        Back to Dashboard
+                    </a>
+                    <button type="submit" class="submit-btn">
+                        <i class="fas fa-paper-plane"></i>
+                        Submit Feedback
+                    </button>
+                </div>
+            </form>
+        </div>
     </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Enhanced form interactions
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.querySelector('form');
+            const submitBtn = document.querySelector('.submit-btn');
+            const originalText = submitBtn.innerHTML;
+
+            // Form submission animation
+            form.addEventListener('submit', function(e) {
+                submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Submitting...';
+                submitBtn.disabled = true;
+            });
+
+            // Add hover effects to form elements
+            const formElements = document.querySelectorAll('.form-control, .form-select');
+            formElements.forEach(element => {
+                element.addEventListener('focus', function() {
+                    this.parentElement.style.transform = 'translateY(-2px)';
+                });
+                
+                element.addEventListener('blur', function() {
+                    this.parentElement.style.transform = 'translateY(0)';
+                });
+            });
+
+            // Validate form on change
+            const requiredFields = document.querySelectorAll('[required]');
+            requiredFields.forEach(field => {
+                field.addEventListener('change', function() {
+                    if (this.value) {
+                        this.style.borderColor = '#27ae60';
+                    } else {
+                        this.style.borderColor = '#e74c3c';
+                    }
+                });
+            });
+        });
+    </script>
 </body>
 </html>

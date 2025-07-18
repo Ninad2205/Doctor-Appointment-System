@@ -7,7 +7,7 @@ const jwt = require("jsonwebtoken");
 const flash = require("express-flash");
 const session = require("express-session");
 const cookieParser = require("cookie-parser");
-
+require('dotenv').config();
 const app = express();
 const PORT = 4000;
 const SECRET_KEY = "your_secret_key"; // Change this to a strong secret
@@ -32,10 +32,11 @@ app.use(flash());
 
 // MySQL Connection
 const db = mysql.createConnection({
-  host: "localhost",
-  user: "root",
-  password: "Ninad@8767046619",
-  database: "hospital_management",
+
+  host: process.env.DB_HOST,
+  user: process.env.DB_USER,
+  password: process.env.DB_PASSWORD,
+  database: process.env.DB_NAME
 });
 app.use((req, res, next) => {
   res.locals.successMessage = req.flash("success");

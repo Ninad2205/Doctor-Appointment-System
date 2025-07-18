@@ -7,9 +7,9 @@ const jwt = require("jsonwebtoken");
 const flash = require("express-flash");
 const session = require("express-session");
 const cookieParser = require("cookie-parser");
-if (process.env.NODE_ENV !== 'production') {
-  require('dotenv').config();
-}
+// if (process.env.NODE_ENV !== 'production') {
+//   require('dotenv').config();
+// }
 const app = express();
 const PORT = 4000;
 const SECRET_KEY = "your_secret_key"; // Change this to a strong secret

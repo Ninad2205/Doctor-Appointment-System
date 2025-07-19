@@ -13,9 +13,13 @@ const cookieParser = require("cookie-parser");
 const app = express();
 const PORT = 4000;
 const SECRET_KEY = "your_secret_key"; // Change this to a strong secret
+// Set the view engine
+
 
 // Middleware Setup
 app.set("view engine", "ejs");
+// Set views directory (especially important in Vercel or cloud)
+app.set('views', path.join(__dirname, 'views'));
 app.use(express.static("public"));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());

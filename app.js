@@ -70,8 +70,8 @@ const verifyToken = (req, res, next) => {
   }
 };
 
-app.get("/", (req, res) => {
-  res.render("home");
+app.get('/', (req, res) => {
+  res.render('home');
 });
 
 //  Login Route

@@ -8,9 +8,9 @@ const jwt = require("jsonwebtoken");
 const flash = require("express-flash");
 const session = require("express-session");
 const cookieParser = require("cookie-parser");
-// if (process.env.NODE_ENV !== 'production') {
-//   require('dotenv').config();
-// }
+if (process.env.NODE_ENV !== 'production') {
+  require('dotenv').config();
+}
 const app = express();
 const PORT = 4000;
 const SECRET_KEY = "your_secret_key"; // Change this to a strong secret
@@ -38,25 +38,33 @@ app.use(
 app.use(flash());
 
 // MySQL Connection
-const db = mysql.createConnection({
+// const mysql = require('mysql2');
 
+const db = mysql.createPool({
+  connectionLimit: 10,
   host: process.env.DB_HOST,
   user: process.env.DB_USER,
   password: process.env.DB_PASSWORD,
-  database: process.env.DB_NAME
+  database: process.env.DB_NAME,
+  waitForConnections: true,
+  queueLimit: 0
 });
-app.use((req, res, next) => {
-  res.locals.successMessage = req.flash("success");
-  res.locals.errorMessage = req.flash("error");
-  next();
-});
-db.connect((err) => {
+
+// Test connection
+db.getConnection((err, connection) => {
   if (err) {
-    console.error("Database connection failed: " + err.message);
+    console.error('❌ Database connection failed: ' + err.message);
     process.exit(1);
   }
-  console.log(" MySQL Connected...");
+  console.log('✅ MySQL connected to Hostinger!');
+  connection.release();
 });
+
+// module.exports = db;
+
+
+// ⚠️ Remove db.connect() → NOT needed with pool
+
 
 //  Middleware to Verify JWT Token
 const verifyToken = (req, res, next) => {

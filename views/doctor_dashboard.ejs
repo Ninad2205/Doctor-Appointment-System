@@ -31,7 +31,258 @@
         padding: 0;
         box-sizing: border-box;
       }
+      /* Modal backdrop */
+      .modal-modern {
+        position: fixed;
+        inset: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: rgba(10, 10, 10, 0.45);
+        z-index: 2000;
+        padding: 20px;
+      }
 
+      .prescription-paper {
+        width: 880px;
+        max-width: calc(100% - 40px);
+        background: #fff;
+        border-radius: 6px;
+        overflow: hidden;
+        box-shadow: 0 18px 40px rgba(0, 0, 0, 0.35);
+        border: 1px solid #e6e6e6;
+        position: relative;
+        font-family: "Georgia", "Times New Roman", serif;
+        color: #111;
+      }
+
+      /* Header */
+      .prescription-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        padding: 18px 22px;
+        background: linear-gradient(180deg, #f8fbff, #ffffff);
+        border-bottom: 1px solid #eee;
+      }
+      .clinic-left {
+        display: flex;
+        gap: 14px;
+        align-items: center;
+      }
+      .clinic-logo-oval {
+        width: 64px;
+        height: 64px;
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: linear-gradient(135deg, #e6f0ff, #cfe4ff);
+        color: #1e62d0;
+        font-size: 30px;
+        box-shadow: inset 0 -4px 0 rgba(0, 0, 0, 0.02);
+      }
+      .clinic-meta .clinic-name {
+        font-size: 1.15rem;
+        font-weight: 700;
+        color: #0b4fb3;
+      }
+      .clinic-meta .clinic-sub {
+        margin-top: 4px;
+        color: #333;
+        font-size: 0.95rem;
+      }
+      .clinic-contact {
+        color: #666;
+        font-size: 0.85rem;
+        margin-top: 6px;
+      }
+
+      .clinic-right {
+        text-align: right;
+        font-size: 0.9rem;
+        color: #555;
+      }
+      .close-btn {
+        position: absolute;
+        right: 12px;
+        top: 12px;
+        border: none;
+        background: transparent;
+        font-size: 18px;
+        color: #666;
+        cursor: pointer;
+      }
+
+      /* Body */
+      .prescription-body {
+        padding: 20px 26px;
+        background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="300" height="200"><text x="10" y="20" font-family="serif" font-size="18" fill="%23f0f0f0" opacity="0.12">Healthy Life Clinic</text></svg>')
+          right bottom no-repeat;
+        background-size: 220px;
+      }
+      .prescription-top {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 12px;
+        font-size: 0.95rem;
+        color: #111;
+      }
+      .rx-block {
+        display: flex;
+        gap: 18px;
+        align-items: flex-start;
+        margin-top: 10px;
+      }
+      .rx-symbol {
+        font-size: 48px;
+        color: #0b4fb3;
+        line-height: 1;
+        margin-top: 6px;
+      }
+      .rx-content {
+        flex: 1;
+      }
+      .prescription-text {
+        width: 100%;
+        min-height: 180px;
+        resize: vertical;
+        border: none;
+        padding: 12px 10px;
+        font-size: 16px;
+        font-family: "Georgia", serif;
+        color: #111;
+        line-height: 1.5;
+        background: linear-gradient(180deg, #fff, #fbfbfb);
+        box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.03);
+      }
+      .prescription-text:focus {
+        outline: 2px dashed rgba(11, 79, 179, 0.12);
+      }
+
+      .small-muted {
+        color: #666;
+        font-size: 0.88rem;
+        margin-top: 8px;
+      }
+
+      /* Footer signature and notes */
+      .prescription-footer {
+        display: flex;
+        justify-content: space-between;
+        gap: 20px;
+        align-items: flex-end;
+        margin-top: 18px;
+        padding-top: 12px;
+        border-top: 1px dashed #e6e6e6;
+      }
+      .notes {
+        flex: 1;
+        font-size: 0.95rem;
+        color: #333;
+      }
+      .notes ul {
+        margin: 6px 0 0 18px;
+        padding: 0;
+        color: #444;
+      }
+      .signature-block {
+        width: 240px;
+        text-align: right;
+        font-size: 0.95rem;
+        color: #222;
+      }
+      .signature-line {
+        margin-bottom: 8px;
+        color: #222;
+      }
+
+      /* Actions */
+      .prescription-actions {
+        display: flex;
+        justify-content: space-between;
+        gap: 12px;
+        padding: 14px 22px;
+        border-top: 1px solid #f1f1f1;
+        background: #fafafa;
+      }
+      .prescription-actions .btn {
+        padding: 10px 14px;
+        border-radius: 6px;
+        font-weight: 600;
+        border: 1px solid transparent;
+        cursor: pointer;
+      }
+      .btn-primary {
+        background: #0b4fb3;
+        color: #fff;
+        border-color: #0b4fb3;
+      }
+      .btn-print {
+        background: #fff;
+        color: #0b4fb3;
+        border: 1px solid #0b4fb3;
+      }
+      .btn-outline-secondary {
+        background: #fff;
+        color: #333;
+        border: 1px solid #cfcfcf;
+      }
+
+      /* Accessibility hide label */
+      .sr-only {
+        position: absolute;
+        left: -10000px;
+        width: 1px;
+        height: 1px;
+        overflow: hidden;
+      }
+
+      /* PRINT STYLES: only printable area */
+      @media print {
+        body > *:not(.modal-modern),
+        .modal-modern > *:not(.prescription-paper),
+        .prescription-paper > *:not(.prescription-header):not(#prescriptionPrintable),
+        .prescription-actions {
+          display: none !important;
+        }
+        
+        .modal-modern {
+          position: absolute !important;
+          background: none !important;
+          padding: 0 !important;
+          margin: 0 !important;
+          display: block !important;
+        }
+        
+        .prescription-paper {
+          box-shadow: none !important;
+          border: none !important;
+          width: 100% !important;
+          max-width: none !important;
+        }
+        
+        .prescription-header,
+        #prescriptionPrintable {
+          display: block !important;
+        }
+        
+        /* make it look like a portrait A4 */
+        @page {
+          size: A4;
+          margin: 15mm;
+        }
+      }
+
+      /* Responsive */
+      @media (max-width: 920px) {
+        .prescription-paper {
+          width: calc(100% - 30px);
+        }
+        .clinic-right {
+          display: none;
+        }
+      }
       body {
         font-family: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
         background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -802,42 +1053,206 @@
     </div>
 
     <!-- Prescription Modal -->
-    <div id="prescriptionModal" class="modal-modern">
-      <div class="modal-content-modern">
-        <div class="modal-header-modern">
-          <h5>Write Prescription for <span id="patient-name"></span></h5>
+    <!-- PROFESSIONAL PRESCRIPTION MODAL -->
+    <div id="prescriptionModal" class="modal-modern" style="display: none">
+      <div
+        class="modal-content-modern prescription-paper"
+        role="dialog"
+        aria-labelledby="prescriptionTitle"
+        aria-modal="true"
+      >
+        <!-- Header (Clinic + Doctor) -->
+        <header class="prescription-header">
+          <div class="clinic-left">
+            <div class="clinic-logo-oval" aria-hidden="true">
+              <i class="fas fa-hospital-symbol"></i>
+            </div>
+            <div class="clinic-meta">
+              <div class="clinic-name">Healthy Life Clinic</div>
+              <div class="clinic-sub">
+                <strong>Dr. <%= doctor.name %></strong> —
+                <span><%= doctor.specialization %></span>
+              </div>
+              <div class="clinic-contact">
+                Reg. No: <%= doctor.doctor_id %> &nbsp; | &nbsp; Phone: <%=
+                doctor.contact_no %>
+              </div>
+            </div>
+          </div>
+
+          <div class="clinic-right">
+            <div class="clinic-address">123 Medical St., YourCity</div>
+            <div class="clinic-email">clinic@example.com</div>
+          </div>
+
           <button
-            type="button"
             class="close-btn"
+            type="button"
+            aria-label="Close"
             onclick="closePrescriptionModal()"
           >
             <i class="fas fa-times"></i>
           </button>
-        </div>
-        <div class="modal-body-modern">
-          <form action="/submit-prescription" method="POST">
-            <input type="hidden" name="appointment_id" id="appointment_id" />
-            <div class="mb-3">
-              <label for="prescription_text" class="form-label"
-                >Prescription Details:</label
+        </header>
+
+        <!-- Body (printable area) -->
+        <main id="prescriptionPrintable" class="prescription-body">
+          <!-- Top row: patient + date -->
+          <div class="prescription-top">
+            <div>
+              <strong>Patient:</strong> <span id="patient-name">—</span>
+            </div>
+            <div>
+              <strong>Date:</strong> <span id="prescription-date"></span>
+            </div>
+          </div>
+
+          <!-- Rx block -->
+          <section class="rx-block">
+            <div class="rx-symbol" aria-hidden="true">℞</div>
+            <div class="rx-content">
+              <label for="prescription_text" class="sr-only"
+                >Prescription Details</label
               >
               <textarea
-                name="prescription_text"
                 id="prescription_text"
-                class="form-control form-control-modern"
-                rows="8"
+                name="prescription_text"
+                class="prescription-text"
+                placeholder="Write medications, dose, frequency, duration, and instructions..."
                 required
-                placeholder="Enter prescription details, medications, dosage, and instructions..."
               ></textarea>
+
+              <div class="instructions small-muted">
+                e.g. Tab Paracetamol 500 mg — 1 tab SOS (if fever) | Tab
+                Omeprazole 20 mg — 1 tab before breakfast | For 5 days
+              </div>
             </div>
-            <button type="submit" class="btn-modern btn-success-modern w-100">
-              <i class="fas fa-paper-plane"></i>
-              Submit Prescription
+          </section>
+
+          <!-- Footer: signature + notes -->
+          <section class="prescription-footer">
+            <div class="notes">
+              <strong>Advice:</strong>
+              <ul>
+                <li>Follow timings as prescribed. Do not exceed dose.</li>
+                <li>Report any adverse reactions immediately.</li>
+              </ul>
+            </div>
+
+            <div class="signature-block">
+              <div class="signature-name">Dr. <%= doctor.name %></div>
+              <div class="signature-spec"><%= doctor.specialization %></div>
+              <div class="signature-contact">Reg: <%= doctor.doctor_id %></div>
+            </div>
+          </section>
+        </main>
+
+        <!-- Actions -->
+        <footer class="prescription-actions">
+          <div class="action-left">
+            <button
+              type="button"
+              class="btn btn-outline-secondary"
+              onclick="closePrescriptionModal()"
+            >
+              <i class="fas fa-times"></i> Close
             </button>
-          </form>
-        </div>
+          </div>
+          <div class="action-right">
+            <button
+              type="button"
+              class="btn btn-primary"
+              onclick="submitPrescription()"
+            >
+              <i class="fas fa-paper-plane"></i> Submit
+            </button>
+            <button
+              type="button"
+              class="btn btn-print"
+              onclick="printPrescription()"
+            >
+              <i class="fas fa-print"></i> Print
+            </button>
+          </div>
+        </footer>
       </div>
     </div>
+
+    <!--  // Open/close helpers (call these from your UI) -->
+    <script>
+      function openPrescriptionModal(appointmentId, patientName) {
+        const modal = document.getElementById("prescriptionModal");
+        modal.style.display = "flex";
+        modal.classList.add("active");
+        document.getElementById("patient-name").textContent = patientName || "—";
+        document.getElementById("prescription-date").textContent = new Date().toLocaleDateString();
+        
+        // Add hidden input for appointment_id if it doesn't exist
+        let hidden = document.querySelector('input[name="appointment_id"]');
+        if (!hidden) {
+            hidden = document.createElement('input');
+            hidden.type = 'hidden';
+            hidden.name = 'appointment_id';
+            document.getElementById('prescriptionPrintable').appendChild(hidden);
+        }
+        hidden.value = appointmentId;
+        
+        // focus on textarea
+        setTimeout(() => document.getElementById("prescription_text").focus(), 200);
+      }
+
+      
+
+      // Print only the printable section cleanly
+      function printPrescription() {
+        // Make sure the modal is visible
+        const modal = document.getElementById("prescriptionModal");
+        const originalDisplay = modal.style.display;
+        modal.style.display = "flex";
+        
+        // Wait a moment for the modal to be visible
+        setTimeout(() => {
+          // Print
+          window.print();
+          
+          // Restore original display state
+          modal.style.display = originalDisplay;
+        }, 100);
+      }
+
+      // Example submit hook: posts to server via fetch (adjust to your route)
+      function submitPrescription() {
+        const text = document.getElementById("prescription_text").value.trim();
+        const appointment_id =
+          document.querySelector('input[name="appointment_id"]')?.value || "";
+        if (!text) {
+          alert("Please enter prescription details.");
+          return;
+        }
+
+        // Simple form POST using fetch (you can instead use a normal form submit)
+        fetch("/submit-prescription", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+          },
+          body: JSON.stringify({ appointment_id, prescription_text: text }),
+        })
+          .then((r) => {
+            if (r.ok) {
+              alert("Prescription saved.");
+              closePrescriptionModal();
+            } else {
+              alert("Failed to save prescription.");
+            }
+          })
+          .catch((err) => {
+            console.error(err);
+            alert("Network error");
+          });
+      }
+    </script>
 
     <script>
       let currentSection = null;
@@ -871,14 +1286,20 @@
         }
       }
 
-      function openPrescriptionModal(appointmentId, patientName) {
-        document.getElementById("patient-name").innerText = patientName;
-        document.getElementById("appointment_id").value = appointmentId;
-        document.getElementById("prescriptionModal").classList.add("active");
-      }
+      // Removed duplicate openPrescriptionModal function
 
       function closePrescriptionModal() {
-        document.getElementById("prescriptionModal").classList.remove("active");
+        const modal = document.getElementById("prescriptionModal");
+        if (!modal) return;
+        // hide by inline style and remove active class to support both display methods
+        modal.style.display = "none";
+        modal.classList.remove("active");
+
+        // clear prescription inputs
+        const textarea = document.getElementById("prescription_text");
+        if (textarea) textarea.value = "";
+        const hidden = document.querySelector('input[name="appointment_id"]');
+        if (hidden) hidden.value = "";
       }
 
       function logout() {

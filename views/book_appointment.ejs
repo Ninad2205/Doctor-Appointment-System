@@ -359,6 +359,37 @@
                     </div>
                 </div>
 
+                <!-- ✅ New Payment Mode Section -->
+                <div class="form-section">
+                    <div class="section-title">
+                        <i class="fas fa-credit-card"></i>
+                        Payment Information
+                    </div>
+
+                    <div class="form-group">
+                        <label for="paymentMode" class="form-label">Payment Mode <span class="required">*</span></label>
+                        <select class="form-select" id="paymentMode" name="payment_mode" required>
+                            <option value="">Select payment mode...</option>
+                            <option value="Online">Online</option>
+                            <option value="Offline">Offline</option>
+                        </select>
+                        <div class="form-help">Choose your preferred payment method</div>
+                    </div>
+
+                    <!-- QR Code section (hidden by default) -->
+                    <div id="qrSection" class="text-center" style="display: none; margin-top: 20px;">
+                        <p class="fw-semibold text-primary">Scan the QR code below to complete your payment</p>
+                        <img src="/images/image.png" alt="QR Code" width="200" height="200" class="rounded shadow-sm border">
+                        <div class="form-help">After payment, click 'Book Appointment' to confirm</div>
+                    </div>
+
+                    <!-- Transaction ID Section (hidden by default) -->
+                    <div id="transactionIdSection" class="form-group" style="display: none;">
+                        <label for="transactionId" class="form-label">Transaction ID <span class="required">*</span></label>
+                        <input type="text" class="form-control" id="transactionId" name="transaction_id" placeholder="Enter Transaction ID">
+                    </div>
+                </div>
+
                 <div class="button-group">
                     <a href="/patient-dashboard" class="btn-secondary">
                         <i class="fas fa-arrow-left"></i>
@@ -383,11 +414,9 @@
 
             let isValid = true;
 
-            // Clear previous errors
             phoneError.innerText = "";
             dateError.innerText = "";
 
-            // Validate phone number
             const phoneRegex = /^[0-9]{10}$/;
             if (!phoneRegex.test(phoneInput.value)) {
                 phoneError.innerText = "Phone number must be exactly 10 digits.";
@@ -395,7 +424,6 @@
                 isValid = false;
             }
 
-            // Validate appointment date (should not allow past dates)
             const now = new Date();
             const selectedDate = new Date(appointmentInput.value);
 
@@ -405,7 +433,13 @@
                 isValid = false;
             }
 
-            // Add loading state if form is valid
+            const paymentMode = document.getElementById('paymentMode').value;
+            const transactionId = document.getElementById('transactionId').value.trim();
+            if (paymentMode === 'Online' && transactionId === '') {
+                alert('Please enter your Transaction ID for online payments.');
+                return false;
+            }
+
             if (isValid) {
                 form.classList.add('loading');
                 const submitBtn = form.querySelector('button[type="submit"]');
@@ -416,7 +450,6 @@
             return isValid;
         }
 
-        // Set minimum date to today
         document.addEventListener('DOMContentLoaded', function() {
             const now = new Date();
             const year = now.getFullYear();
@@ -424,16 +457,13 @@
             const day = String(now.getDate()).padStart(2, '0');
             const hours = String(now.getHours()).padStart(2, '0');
             const minutes = String(now.getMinutes()).padStart(2, '0');
-            
             const minDateTime = `${year}-${month}-${day}T${hours}:${minutes}`;
             document.getElementById('appointmentTime').min = minDateTime;
         });
 
-        // Real-time phone validation
         document.getElementById('contactNo').addEventListener('input', function() {
             const phoneError = document.getElementById('phoneError');
             const phoneRegex = /^[0-9]{10}$/;
-            
             if (this.value.length > 0 && !phoneRegex.test(this.value)) {
                 phoneError.innerText = "Phone number must be exactly 10 digits.";
             } else {
@@ -441,16 +471,26 @@
             }
         });
 
-        // Real-time date validation
         document.getElementById('appointmentTime').addEventListener('change', function() {
             const dateError = document.getElementById('dateError');
             const now = new Date();
             const selectedDate = new Date(this.value);
-            
             if (selectedDate < now) {
                 dateError.innerText = "Appointment date must be today or in the future.";
             } else {
                 dateError.innerText = "";
+            }
+        });
+
+        document.getElementById('paymentMode').addEventListener('change', function() {
+            const qrSection = document.getElementById('qrSection');
+            const transactionIdSection = document.getElementById('transactionIdSection');
+            if (this.value === 'Online') {
+                qrSection.style.display = 'block';
+                transactionIdSection.style.display = 'block';
+            } else {
+                qrSection.style.display = 'none';
+                transactionIdSection.style.display = 'none';
             }
         });
     </script>

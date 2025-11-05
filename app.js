@@ -611,12 +611,49 @@ app.get("/delete-appointment/:id", verifyToken, (req, res) => {
 });
 
 //  Book Appointment (GET Form)
+// app.get("/book-appointment", verifyToken, (req, res) => {
+//   db.query("SELECT doctor_id, name FROM doctors", (err, doctors) => {
+//     if (err) return res.status(500).send(" Error fetching doctors.");
+//     res.render("book_appointment", { doctors, user: req.user });
+//   });
+// });
 app.get("/book-appointment", verifyToken, (req, res) => {
-  db.query("SELECT doctor_id, name FROM doctors", (err, doctors) => {
-    if (err) return res.status(500).send(" Error fetching doctors.");
-    res.render("book_appointment", { doctors, user: req.user });
-  });
+  const patientId = req.user.id; // Token gives patient_id only
+
+  // 1️⃣ Fetch patient details from DB
+  db.query(
+    "SELECT patient_id, name, contact_no FROM patients WHERE patient_id = ?",
+    [patientId],
+    (err, patientResults) => {
+      if (err) {
+        console.error("Error fetching patient:", err);
+        req.flash("error", "Could not fetch patient details.");
+        return res.redirect("/patient-dashboard");
+      }
+
+      if (patientResults.length === 0) {
+        req.flash("error", "Patient not found.");
+        return res.redirect("/patient-dashboard");
+      }
+
+      const patient = patientResults[0]; // ✅ Now we have name & contact_no
+
+      // 2️⃣ Fetch doctors list
+      db.query("SELECT * FROM doctors", (err, doctors) => {
+        if (err) {
+          console.error("Error fetching doctors:", err);
+          req.flash("error", "Could not load doctors list.");
+          return res.redirect("/patient-dashboard");
+        }
+
+        // 3️⃣ Render the page with full data
+        res.render("book_appointment", { doctors, patient });
+      });
+    }
+  );
 });
+
+
 
 //  Handle Appointment Booking (POST)
 app.post("/book-appointment", verifyToken, (req, res) => {

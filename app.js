@@ -335,6 +335,152 @@ app.get("/doctor-dashboard", verifyToken, (req, res) => {
   });
 });
 
+// API: get today's appointments for logged-in doctor (JSON)
+app.get('/reports/daily', verifyToken, (req, res) => {
+  if (req.user.role !== 'doctor') return res.status(403).json({ error: 'Unauthorized' });
+
+  const sql = `
+    SELECT a.id, a.appointment_time, a.status, p.name AS patient_name, p.contact_no
+    FROM appointments a
+    JOIN patients p ON a.patient_id = p.patient_id
+    WHERE a.doctor_id = ? AND DATE(a.appointment_time) = CURDATE()
+    ORDER BY a.appointment_time ASC
+  `;
+
+  db.query(sql, [req.user.id], (err, results) => {
+    if (err) {
+      console.error('Failed to fetch daily report:', err);
+      return res.status(500).json({ error: 'Database error' });
+    }
+    res.json({ appointments: results || [] });
+  });
+});
+
+// Server-rendered daily report page (for doctor)
+app.get('/reports/daily-page', verifyToken, (req, res) => {
+  if (req.user.role !== 'doctor') {
+    req.flash('error', 'Unauthorized');
+    return res.redirect('/login');
+  }
+
+  const sql = `
+    SELECT a.id, a.appointment_time, a.status, p.name AS patient_name, p.contact_no
+    FROM appointments a
+    JOIN patients p ON a.patient_id = p.patient_id
+    WHERE a.doctor_id = ? AND DATE(a.appointment_time) = CURDATE()
+    ORDER BY a.appointment_time ASC
+  `;
+
+  db.query(sql, [req.user.id], (err, results) => {
+    if (err) {
+      console.error('Failed to fetch daily report page:', err);
+      req.flash('error', 'Failed to load report');
+      return res.redirect('/doctor-dashboard');
+    }
+
+    res.render('daily_report', {
+      doctorId: req.user.id,
+      appointments: results || [],
+      today: new Date()
+    });
+  });
+});
+
+// Server-rendered monthly report page (for doctor)
+app.get('/reports/monthly-page', verifyToken, (req, res) => {
+  if (req.user.role !== 'doctor') {
+    req.flash('error', 'Unauthorized');
+    return res.redirect('/login');
+  }
+
+  const sql = `
+    SELECT a.id, a.appointment_time, a.status, p.name AS patient_name, p.contact_no
+    FROM appointments a
+    JOIN patients p ON a.patient_id = p.patient_id
+    WHERE a.doctor_id = ? AND MONTH(a.appointment_time) = MONTH(CURDATE()) AND YEAR(a.appointment_time) = YEAR(CURDATE())
+    ORDER BY a.appointment_time ASC
+  `;
+
+  db.query(sql, [req.user.id], (err, results) => {
+    if (err) {
+      console.error('Failed to fetch monthly report page:', err);
+      req.flash('error', 'Failed to load report');
+      return res.redirect('/doctor-dashboard');
+    }
+
+    const now = new Date();
+    const monthLabel = now.toLocaleString('default', { month: 'long', year: 'numeric' });
+
+    res.render('monthly_report', {
+      doctorId: req.user.id,
+      appointments: results || [],
+      monthLabel
+    });
+  });
+});
+
+// Server-rendered yearly report page (for doctor)
+app.get('/reports/yearly-page', verifyToken, (req, res) => {
+  if (req.user.role !== 'doctor') {
+    req.flash('error', 'Unauthorized');
+    return res.redirect('/login');
+  }
+
+  const sql = `
+    SELECT a.id, a.appointment_time, a.status, p.name AS patient_name, p.contact_no
+    FROM appointments a
+    JOIN patients p ON a.patient_id = p.patient_id
+    WHERE a.doctor_id = ? AND YEAR(a.appointment_time) = YEAR(CURDATE())
+    ORDER BY a.appointment_time ASC
+  `;
+
+  db.query(sql, [req.user.id], (err, results) => {
+    if (err) {
+      console.error('Failed to fetch yearly report page:', err);
+      req.flash('error', 'Failed to load report');
+      return res.redirect('/doctor-dashboard');
+    }
+
+    const now = new Date();
+    const yearLabel = now.getFullYear();
+
+    res.render('yearly_report', {
+      doctorId: req.user.id,
+      appointments: results || [],
+      yearLabel
+    });
+  });
+});
+
+// Server-rendered feedback report page (for doctor)
+app.get('/reports/feedback-page', verifyToken, (req, res) => {
+  if (req.user.role !== 'doctor') {
+    req.flash('error', 'Unauthorized');
+    return res.redirect('/login');
+  }
+
+  const sql = `
+    SELECT f.rating, f.comment, f.created_at, p.name AS patient_name
+    FROM feedback f
+    JOIN patients p ON f.patient_id = p.patient_id
+    WHERE f.doctor_id = ?
+    ORDER BY f.created_at DESC
+  `;
+
+  db.query(sql, [req.user.id], (err, results) => {
+    if (err) {
+      console.error('Failed to fetch feedback report page:', err);
+      req.flash('error', 'Failed to load report');
+      return res.redirect('/doctor-dashboard');
+    }
+
+    res.render('feedback_report', {
+      doctorId: req.user.id,
+      feedbacks: results || []
+    });
+  });
+});
+
 //edit doctor
 app.get("/edit-doctor-profile", verifyToken, (req, res) => {
   if (req.user.role !== "doctor") return res.status(403).send(" Unauthorized");

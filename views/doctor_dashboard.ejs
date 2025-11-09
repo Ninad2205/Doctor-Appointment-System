@@ -636,6 +636,82 @@
         color: white;
       }
 
+      /* Reports cards */
+      .reports-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: 1rem;
+        margin-top: 1rem;
+      }
+
+      .report-card {
+        background: var(--bg-light);
+        border: 1px solid var(--border-color);
+        border-radius: 8px;
+        padding: 1rem 1.25rem;
+        text-align: left;
+        cursor: default;
+      }
+
+      .report-card i {
+        font-size: 1.6rem;
+        color: var(--primary-color);
+        margin-bottom: 0.5rem;
+        display: block;
+      }
+
+      .report-card h3 {
+        margin: 0.25rem 0 0.5rem 0;
+        font-size: 1.05rem;
+      }
+
+      .report-card p {
+        margin: 0;
+        color: var(--text-light);
+        font-size: 0.9rem;
+      }
+
+      /* Report modal styles */
+      .report-modal {
+        display: none;
+        position: fixed;
+        inset: 0;
+        background: rgba(0,0,0,0.5);
+        z-index: 2000;
+        padding: 20px;
+        align-items: center;
+        justify-content: center;
+        display: flex;
+      }
+
+      .report-modal .modal-inner {
+        background: #fff;
+        border-radius: 8px;
+        max-width: 1000px;
+        width: 100%;
+        max-height: 85vh;
+        overflow: auto;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+      }
+
+      .report-modal .modal-header {
+        padding: 1rem 1.25rem;
+        border-bottom: 1px solid var(--border-color);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .report-modal .modal-body {
+        padding: 1rem 1.25rem;
+      }
+
+      .report-modal .modal-footer {
+        padding: 1rem 1.25rem;
+        border-top: 1px solid var(--border-color);
+        text-align: right;
+      }
+
       .modal-modern {
         display: none;
         position: fixed;
@@ -830,26 +906,22 @@
           <!-- Navigation Buttons -->
           <div class="nav-buttons">
             <button class="nav-btn" onclick="toggleSection('profile')">
-              <i
-                class="fas fa-user-circle"
-                style="color: var(--secondary-color)"
-              ></i>
+              <i class="fas fa-user-circle" style="color: var(--secondary-color)"></i>
               <div class="nav-btn-text">View Profile</div>
             </button>
 
             <button class="nav-btn" onclick="toggleSection('appointments')">
-              <i
-                class="fas fa-calendar-alt"
-                style="color: var(--success-color)"
-              ></i>
+              <i class="fas fa-calendar-alt" style="color: var(--success-color)"></i>
               <div class="nav-btn-text">Appointments</div>
             </button>
 
+            <button class="nav-btn" onclick="toggleSection('reports')">
+              <i class="fas fa-chart-bar" style="color: var(--accent-color)"></i>
+              <div class="nav-btn-text">Reports</div>
+            </button>
+
             <button class="nav-btn" onclick="toggleSection('feedback')">
-              <i
-                class="fas fa-comments"
-                style="color: var(--warning-color)"
-              ></i>
+              <i class="fas fa-comments" style="color: var(--warning-color)"></i>
               <div class="nav-btn-text">Patient Feedback</div>
             </button>
           </div>
@@ -992,6 +1064,77 @@
               <p>You don't have any appointments scheduled yet.</p>
             </div>
             <% } %>
+          </div>
+ 
+          <!-- Reports Section -->
+          <div id="reports-section" class="section-container">
+            <div class="section-title">
+              <i class="fas fa-chart-bar"></i>
+              Reports & Analytics
+            </div>
+
+            <div class="reports-grid">
+              <div class="report-card">
+                <div style="cursor:pointer">
+                  <i class="fas fa-calendar-day"></i>
+                  <h3>Daily Report</h3>
+                  <p>View today's appointments</p>
+                  <div style="margin-top:0.75rem">
+                    <a href="/reports/daily-page" class="btn-modern btn-primary-modern">View Report</a>
+                  </div>
+                </div>
+              </div>
+
+                <!-- Report Modal -->
+                <div id="reportModal" class="report-modal" style="display:none">
+                  <div class="modal-inner">
+                    <div class="modal-header">
+                      <h4 id="report-title">Report</h4>
+                      <button type="button" class="btn-close" onclick="closeReportModal()"></button>
+                    </div>
+                    <div id="report-body" class="modal-body">
+                      <div id="report-content">Loading...</div>
+                    </div>
+                    <div class="modal-footer">
+                      <button class="btn-modern btn-outline-secondary" onclick="closeReportModal()">Close</button>
+                      <button class="btn-modern btn-primary-modern" onclick="printReport()">Print</button>
+                    </div>
+                  </div>
+                </div>
+
+              <div class="report-card">
+                <div style="cursor:pointer">
+                  <i class="fas fa-calendar-alt"></i>
+                  <h3>Monthly Report</h3>
+                  <p>View appointments for the current month</p>
+                  <div style="margin-top:0.75rem">
+                    <a href="/reports/monthly-page" class="btn-modern btn-primary-modern">View Report</a>
+                  </div>
+                </div>
+              </div>
+
+              <div class="report-card">
+                <div style="cursor:pointer">
+                  <i class="fas fa-calendar"></i>
+                  <h3>Yearly Report</h3>
+                  <p>View appointments summary for the year</p>
+                  <div style="margin-top:0.75rem">
+                    <a href="/reports/yearly-page" class="btn-modern btn-primary-modern">View Report</a>
+                  </div>
+                </div>
+              </div>
+
+              <div class="report-card">
+                <div style="cursor:pointer">
+                  <i class="fas fa-comments"></i>
+                  <h3>Feedback Report</h3>
+                  <p>View patient feedback and ratings</p>
+                  <div style="margin-top:0.75rem">
+                    <a href="/reports/feedback-page" class="btn-modern btn-primary-modern">View Report</a>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
 
           <!-- Feedback Section -->
@@ -1252,10 +1395,98 @@
     </script>
 
     <script>
+      // Show report modal and fetch data based on type
+      function showReport(type) {
+        const modal = document.getElementById('reportModal');
+        const title = document.getElementById('report-title');
+        const content = document.getElementById('report-content');
+
+        if (!modal || !title || !content) return;
+
+        title.textContent = (type === 'daily') ? "Today's Appointments" : type.charAt(0).toUpperCase() + type.slice(1) + " Report";
+        content.innerHTML = 'Loading...';
+        modal.style.display = 'flex';
+
+        // Only implementing daily fetch now
+        if (type === 'daily') {
+          fetch('/reports/daily', { credentials: 'same-origin' })
+            .then(res => {
+              if (!res.ok) throw new Error('Network response was not ok');
+              return res.json();
+            })
+            .then(data => {
+              const appts = data.appointments || [];
+              if (appts.length === 0) {
+                content.innerHTML = '<div class="empty-state"><i class="fas fa-calendar-times"></i><h4>No Appointments Today</h4><p>No appointments scheduled for today.</p></div>';
+                return;
+              }
+
+              const rows = appts.map(a => `
+                <tr>
+                  <td>${a.patient_name || 'N/A'}</td>
+                  <td>${a.contact_no || 'N/A'}</td>
+                  <td>${new Date(a.appointment_time).toLocaleString()}</td>
+                  <td>${a.status || 'N/A'}</td>
+                </tr>
+              `).join('');
+
+              content.innerHTML = `
+                <div class="table-responsive">
+                  <table class="table table-modern">
+                    <thead>
+                      <tr>
+                        <th>Patient Name</th>
+                        <th>Contact</th>
+                        <th>Appointment Time</th>
+                        <th>Status</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      ${rows}
+                    </tbody>
+                  </table>
+                </div>
+              `;
+            })
+            .catch(err => {
+              console.error('Failed to fetch daily report:', err);
+              content.innerHTML = '<div class="text-danger p-3">Failed to load report.</div>';
+            });
+        } else {
+          content.innerHTML = '<div class="p-3">Report type not implemented yet.</div>';
+        }
+      }
+
+      function closeReportModal() {
+        const modal = document.getElementById('reportModal');
+        if (modal) modal.style.display = 'none';
+      }
+
+      // Close report modal when clicking outside or pressing Escape
+      document.addEventListener('click', function(e) {
+        const modal = document.getElementById('reportModal');
+        if (!modal) return;
+        if (e.target === modal) closeReportModal();
+      });
+
+      document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') closeReportModal();
+      });
+
+      function printReport() {
+        const reportContent = document.getElementById('report-content').innerHTML;
+        const reportTitle = document.getElementById('report-title').textContent;
+        const w = window.open('', '_blank');
+        w.document.write(`<!doctype html><html><head><title>${reportTitle}</title><link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet"></head><body><div class="container mt-4"><h3>${reportTitle}</h3>${reportContent}</div><script>window.onload=function(){window.print(); setTimeout(()=>window.close(),500);}</script></body></html>`);
+        w.document.close();
+      }
+    </script>
+
+    <script>
       let currentSection = null;
 
       function toggleSection(sectionName) {
-        const sections = ["profile", "appointments", "feedback"];
+        const sections = ["profile", "appointments", "reports", "feedback"];
         const targetSection = document.getElementById(sectionName + "-section");
 
         // Hide all sections
